@@ -1,10 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
-  <rect width="32" height="32" rx="7" fill="#0a0a0b"/>
-  <g fill="none" stroke="#3f3f46" stroke-width="1.5" stroke-linejoin="round">
-    <path d="M16 5.4 26 11.2v11.6L16 28.6 6 22.8V11.2L16 5.4Z"/>
-    <path d="M16 5.4v11.4m0 0 10-5.6M16 16.8 6 11.2"/>
-  </g>
-  <path d="M16 16.8v5.4" stroke="#2dd4bf" stroke-width="1.6" stroke-linecap="round"/>
-  <circle cx="16" cy="24.6" r="2.4" fill="#2dd4bf"/>
-  <circle cx="16" cy="16.8" r="1.8" fill="#5eead4"/>
+  <rect width="32" height="32" rx="7" fill="#0A0A0B"/>
+  <!-- Filled isometric cube: one bold silhouette, three tones for facet separation.
+       Nothing thinner than 3px at 32px, so it survives being scaled to 16px. -->
+  <path d="M16 3.5 28.5 10.75 16 18 3.5 10.75Z" fill="#5EEAD4"/>
+  <path d="M3.5 10.75 16 18v10.5L3.5 21.25Z" fill="#2DD4BF"/>
+  <path d="M28.5 10.75 28.5 21.25 16 28.5V18Z" fill="#14B8A6"/>
 </svg>

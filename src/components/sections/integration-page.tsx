@@ -41,7 +41,7 @@ const T = {
     installTitle: (n: string) => `Install ${n} in four steps`,
     installDesc: (sw: string) => `Everything runs locally. The server binds to loopback by default and only exposes the tools you approve in ${sw}.`,
     prerelease: "Pre-release.",
-    prereleaseBody: (n: string) => `These commands describe the interface we are shipping — the packages are not published yet.`,
+    prereleaseBody: (n: string) => `These commands describe the interface we are shipping for ${n} — the packages are not published yet.`,
     prereleaseLink: (n: string) => `Get notified when ${n} launches`,
     agentsTitle: (n: string) => `${n} works with the agents you already use`,
     agentsNote: "Any other MCP-compatible client works too — one config entry, stdio by default.",
