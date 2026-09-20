@@ -188,6 +188,12 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
       <fieldset className="flex flex-col gap-3">
         <legend className="mb-1 text-[12.5px] font-medium text-fg">{t.softwareLegend}</legend>
         <div className="flex flex-wrap gap-2">
+          {/*
+            The tick glyph is drawn by `.checkbox-mint:checked` in the components
+            layer. `checked:bg-mint` has to be set here as a utility as well:
+            on its own, `bg-ink` wins the cascade, leaving a near-black tick
+            invisible on a near-black box.
+          */}
           {t.softwareOptions.map((option) => (
             <label
               key={option.value}
@@ -197,7 +203,7 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
                 type="checkbox"
                 name="software"
                 value={option.value}
-                className="checkbox-mint h-4 w-4 shrink-0 appearance-none rounded-[4px] border border-line bg-ink transition-colors checked:border-mint"
+                className="checkbox-mint h-4 w-4 shrink-0 appearance-none rounded-[4px] border border-line bg-ink transition-colors checked:border-mint checked:bg-mint"
               />
               {option.label}
             </label>
