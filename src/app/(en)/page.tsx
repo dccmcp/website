@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   title: `MCP for Blender, Rhino, QGIS & Engineering Software | ${site.name}`,
   description:
     "Deploy production-ready MCP Servers that let Claude, Cursor and your own agents control Blender, Rhino, FreeCAD, QGIS and OpenCV — with typed tools, safety policies and audit logs.",
-  alternates: { canonical: "/" },
+  alternates: { canonical: "/", languages: { en: "/", "zh-CN": "/zh" } },
 };
 
 const faqSchema = {
