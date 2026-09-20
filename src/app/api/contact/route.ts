@@ -9,9 +9,17 @@ type Payload = {
   software?: string[];
   message?: string;
   honey?: string;
+  turnstileToken?: string;
 };
 
 const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+const SITEVERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
+
+type SiteverifyResponse = {
+  success?: boolean;
+  "error-codes"?: string[];
+};
 
 /**
  * Transport resolution order:
@@ -50,6 +58,47 @@ export async function POST(request: Request) {
 
   if (Object.keys(errors).length) {
     return NextResponse.json({ error: "Validation failed.", fields: errors }, { status: 422 });
+  }
+
+  // Cloudflare Turnstile. Enforced only when a secret is configured, so local
+  // development and previews keep working without Cloudflare keys.
+  const turnstileSecret = process.env.TURNSTILE_SECRET_KEY;
+
+  if (turnstileSecret) {
+    const token = body.turnstileToken?.trim() ?? "";
+    const forwarded = request.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+    const rejected = NextResponse.json(
+      {
+        error: "captcha-failed",
+        message: "We could not verify that you are human. Reload the page and try again.",
+      },
+      { status: 403 },
+    );
+
+    if (!token) return rejected;
+
+    let verdict: SiteverifyResponse | null = null;
+
+    try {
+      const response = await fetch(SITEVERIFY_URL, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          secret: turnstileSecret,
+          response: token,
+          ...(forwarded ? { remoteip: forwarded } : {}),
+        }),
+        cache: "no-store",
+      });
+      verdict = (await response.json()) as SiteverifyResponse;
+    } catch (error) {
+      console.error("Contact form: Turnstile verification failed", error);
+    }
+
+    if (!verdict?.success) {
+      console.warn("Contact form: Turnstile rejected a submission", verdict?.["error-codes"]);
+      return rejected;
+    }
   }
 
   const enquiry = {

@@ -1,9 +1,70 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { CheckCircle, WarningCircle, PaperPlaneTilt, CircleNotch } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+type TurnstileWidget = {
+  render: (target: HTMLElement, options: Record<string, unknown>) => string;
+  reset: (widgetId?: string) => void;
+  remove: (widgetId?: string) => void;
+  getResponse: (widgetId?: string) => string | undefined;
+};
+
+declare global {
+  interface Window {
+    turnstile?: TurnstileWidget;
+  }
+}
+
+const TURNSTILE_SRC = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+const TURNSTILE_SCRIPT_ID = "cf-turnstile-script";
+
+let turnstilePromise: Promise<TurnstileWidget> | null = null;
+
+/**
+ * Cloudflare's explicit-render script, loaded once per document no matter how
+ * many forms are on the page (the enterprise page has two). Every widget is
+ * then rendered and reset by hand so tokens are never reused.
+ */
+function loadTurnstile(): Promise<TurnstileWidget> {
+  if (typeof window === "undefined") {
+    return Promise.reject(new Error("Turnstile needs a browser"));
+  }
+
+  if (turnstilePromise) return turnstilePromise;
+
+  turnstilePromise = new Promise<TurnstileWidget>((resolve, reject) => {
+    if (window.turnstile) {
+      resolve(window.turnstile);
+      return;
+    }
+
+    if (!document.getElementById(TURNSTILE_SCRIPT_ID)) {
+      const script = document.createElement("script");
+      script.id = TURNSTILE_SCRIPT_ID;
+      script.src = TURNSTILE_SRC;
+      script.async = true;
+      script.defer = true;
+      document.head.appendChild(script);
+    }
+
+    const startedAt = Date.now();
+    const timer = window.setInterval(() => {
+      if (window.turnstile) {
+        window.clearInterval(timer);
+        resolve(window.turnstile);
+      } else if (Date.now() - startedAt > 8000) {
+        window.clearInterval(timer);
+        turnstilePromise = null;
+        reject(new Error("Turnstile did not load"));
+      }
+    }, 150);
+  });
+
+  return turnstilePromise;
+}
 
 type ContactFormLocale = "en" | "zh";
 
@@ -41,6 +102,11 @@ const copy = {
     sending: "Sending",
     orEmail: "Or email",
     success: "Received. We reply to every enterprise enquiry within one business day.",
+    captchaRequired: "Verification is still running — give it a second and send again.",
+    captchaFailed:
+      "We could not verify that you are human. Reload the page and try again, or email support@dccmcp.com.",
+    captchaUnavailable:
+      "The verification widget could not load. Email support@dccmcp.com and we will pick it up from there.",
     genericError:
       "Something went wrong sending that. Email support@dccmcp.com and we will pick it up from there.",
     networkError:
@@ -78,6 +144,9 @@ const copy = {
     sending: "发送中",
     orEmail: "或者直接写邮件到",
     success: "已收到。我们会在一个工作日内回复每一封企业咨询。",
+    captchaRequired: "人机验证还在进行中——稍等一秒再发送一次。",
+    captchaFailed: "人机验证没通过。请刷新页面重试，或直接写信到 support@dccmcp.com。",
+    captchaUnavailable: "验证组件没能加载。请写信到 support@dccmcp.com，我们会接着处理。",
     genericError: "发送出了点问题。请写信到 support@dccmcp.com，我们会接着处理。",
     networkError: "无法连上服务器。请写信到 support@dccmcp.com，我们继续用邮件沟通。",
     fieldErrors: {
@@ -95,6 +164,42 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
+  const [captchaBroken, setCaptchaBroken] = useState(false);
+  const widgetRef = useRef<HTMLDivElement | null>(null);
+  const widgetIdRef = useRef<string | null>(null);
+
+  const siteKey = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY;
+
+  useEffect(() => {
+    if (!siteKey) return;
+    let cancelled = false;
+
+    loadTurnstile()
+      .then((turnstile) => {
+        if (cancelled || !widgetRef.current) return;
+        widgetIdRef.current = turnstile.render(widgetRef.current, {
+          sitekey: siteKey,
+          theme: "dark",
+          // Managed mode clears real visitors in the background; this keeps the
+          // widget out of the layout entirely until a challenge is required.
+          appearance: "interaction-only",
+          size: "flexible",
+          callback: () => setCaptchaBroken(false),
+          "error-callback": () => setCaptchaBroken(true),
+          "expired-callback": () => setCaptchaBroken(true),
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setCaptchaBroken(true);
+      });
+
+    return () => {
+      cancelled = true;
+      const widgetId = widgetIdRef.current;
+      widgetIdRef.current = null;
+      if (widgetId && window.turnstile) window.turnstile.remove(widgetId);
+    };
+  }, [siteKey]);
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -104,6 +209,19 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
     setStatus("submitting");
     setMessage("");
     setFieldErrors({});
+
+    // Tokens are single-use, so read a fresh one on every attempt.
+    const turnstileToken = siteKey
+      ? window.turnstile?.getResponse(widgetIdRef.current ?? undefined)
+      : undefined;
+
+    if (siteKey && !turnstileToken) {
+      setStatus("error");
+      // A widget that failed to load must not read as "still verifying" — that
+      // sends people back to a button that cannot work. Point them at email.
+      setMessage(captchaBroken ? t.captchaUnavailable : t.captchaRequired);
+      return;
+    }
 
     try {
       const response = await fetch("/api/contact", {
@@ -117,6 +235,7 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
           software: data.getAll("software"),
           message: data.get("message"),
           honey: data.get("honey"),
+          turnstileToken,
         }),
       });
 
@@ -127,8 +246,15 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
         fields?: Record<string, string>;
       };
 
+      // Whatever happened, the token has been spent.
+      if (siteKey) window.turnstile?.reset(widgetIdRef.current ?? undefined);
+
       if (!response.ok) {
         setStatus("error");
+        if (payload.error === "captcha-failed") {
+          setMessage(captchaBroken ? t.captchaUnavailable : t.captchaFailed);
+          return;
+        }
         // Field messages come back from the API in English; substitute the
         // local wording for the keys we know about.
         const fields = payload.fields ?? {};
@@ -227,6 +353,15 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
           <span className="text-[12px] text-rose-300">{fieldErrors.message}</span>
         ) : null}
       </label>
+
+      {siteKey ? (
+        <div className="flex flex-col gap-2">
+          <div ref={widgetRef} />
+          {captchaBroken ? (
+            <span className="text-[12px] text-amber-200">{t.captchaUnavailable}</span>
+          ) : null}
+        </div>
+      ) : null}
 
       {/* Honeypot — hidden from users, irresistible to bots. */}
       <input

@@ -144,6 +144,30 @@ There is a free Community edition, so nothing gates the product behind a sales c
 
 It never reports a success it did not achieve.
 
+### Bot protection
+
+The form carries a Cloudflare Turnstile widget configured for **Managed** mode with
+`appearance: "interaction-only"`. Real visitors are cleared in the background and the widget
+occupies no space at all unless Cloudflare decides a challenge is needed.
+
+| Variable | Purpose |
+| --- | --- |
+| `NEXT_PUBLIC_TURNSTILE_SITE_KEY` | Widget site key (public, baked in at build time) |
+| `TURNSTILE_SECRET_KEY` | Server-side secret; verification is enforced only when this is set |
+
+Details worth keeping:
+
+- The widget is rendered through the explicit JS API so the enterprise page's two forms share
+  one script load, and every widget is `reset()` after a submit because tokens are single-use.
+- Tokens go to `/api/contact` as `turnstileToken` and are checked against
+  `https://challenges.cloudflare.com/turnstile/v0/siteverify` before any transport runs.
+- **Fail-closed, with an honest fallback.** If the script cannot load, the form says so and
+  points at `support@dccmcp.com` rather than claiming verification is "still running".
+- Local development and previews without keys behave exactly as they did before — no captcha,
+  no rejection — so the transport work is still testable in isolation.
+- Cloudflare's published test keys are listed in `.env.example`; the always-pass and always-fail
+  pairs are the fastest way to exercise both branches.
+
 ### ZeptoMail
 
 Enquiries go out over ZeptoMail's HTTP API (`https://api.zeptomail.com/v1.1/email`,
@@ -214,14 +238,17 @@ settings. No other build configuration is required.
 
 ### Outstanding production setup
 
-Two things are configured outside this repository and are **not done yet**:
+Three things live outside this repository and are **not done yet**:
 
 1. **`dccmcp.com` has no MX records.** Every "email support@dccmcp.com" call to action on the site
    — footer, pricing, download, legal, and the contact form's fallback — currently bounces. Fix by
    turning on Cloudflare Email Routing (free) on the `dccmcp.com` zone and forwarding
    `support@dccmcp.com` to a real mailbox, or by pointing MX at a mailbox provider. Note that
    outbound mail from `support@dccmcp.com` works regardless — ZeptoMail does not need inbound MX.
-2. **`CONTACT_TO_EMAIL` is unset.** ZeptoMail sends fine, but the form needs a destination inbox
+2. **Turnstile keys are unset.** The captcha layer is written and tested but stays inactive
+   until `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are set, so the production
+   form currently has no bot protection beyond the honeypot.
+3. **`CONTACT_TO_EMAIL` is unset.** ZeptoMail sends fine, but the form needs a destination inbox
    that can actually receive mail. Do not point it at `support@dccmcp.com` until item 1 is fixed:
    the transport would accept the message, the form would report success, and the enquiry would
    silently bounce — exactly the failure mode this route is written to avoid.
