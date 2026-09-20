@@ -5,18 +5,38 @@ import { Plus } from "@phosphor-icons/react";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { cn } from "@/lib/utils";
 import { homeFaq, type FaqItem } from "@/lib/faq";
+import type { Locale } from "@/i18n/config";
 
-export function Faq({ items = homeFaq, id = "faq" }: { items?: FaqItem[]; id?: string }) {
+const faqCopy = {
+  en: {
+    eyebrow: "FAQ",
+    title: "Questions teams ask before they install",
+    description:
+      "If something is missing, ask us directly — we answer technical questions with technical answers.",
+  },
+  zh: {
+    eyebrow: "常见问题",
+    title: "团队在安装前最常问的问题",
+    description: "如果没有覆盖到你的问题，直接写信给我们——技术问题我们给技术回答。",
+  },
+} as const;
+
+export function Faq({
+  items = homeFaq,
+  id = "faq",
+  locale = "en",
+}: {
+  items?: FaqItem[];
+  id?: string;
+  locale?: Locale;
+}) {
   const [open, setOpen] = useState<number | null>(0);
+  const t = faqCopy[locale];
 
   return (
     <Section id={id}>
       <div className="grid gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-14">
-        <SectionHeading
-          eyebrow="FAQ"
-          title="Questions teams ask before they install"
-          description="If something is missing, ask us directly — we answer technical questions with technical answers."
-        />
+        <SectionHeading eyebrow={t.eyebrow} title={t.title} description={t.description} />
 
         <ul className="flex flex-col divide-y divide-line/70 border-y border-line/70">
           {items.map((item, index) => {

@@ -17,12 +17,83 @@ import { BrandIcon } from "@/components/site/brand-icon";
 import { FinalCta } from "@/components/sections/final-cta";
 import { getIntegration, integrations, relatedIntegrations, type Integration } from "@/lib/integrations";
 import { agentIconFor } from "@/lib/agents";
+import { getIntegrationZh } from "@/lib/integrations.zh";
+import type { Locale } from "@/i18n/config";
 import { site } from "@/lib/site";
 
 const LAST_REVIEWED_FALLBACK = "2026-09-20";
 
-export function integrationMetadata(slug: string) {
-  const integration = getIntegration(slug);
+const T = {
+  en: {
+    overview: "Overview",
+    whatIs: (n: string) => `What is ${n}?`,
+    whyBreaks: "Why it breaks",
+    whyBreaksTitle: (sw: string) => `What goes wrong when agents drive ${sw} without a contract`,
+    howWorks: "How it works",
+    howWorksTitle: (n: string) => `How ${n} keeps intent, structure and traceability intact`,
+    tools: "Tool reference",
+    toolsTitle: (n: string) => `${n} tools — every tool and its risk class`,
+    toolsDesc: "Agents discover this list at connect time. You decide which entries are auto-approved, which need a human and which are denied in production files.",
+    tool: "Tool",
+    description: "Description",
+    access: "Access",
+    install: "Install",
+    installTitle: (n: string) => `Install ${n} in four steps`,
+    installDesc: (sw: string) => `Everything runs locally. The server binds to loopback by default and only exposes the tools you approve in ${sw}.`,
+    prerelease: "Pre-release.",
+    prereleaseBody: (n: string) => `These commands describe the interface we are shipping — the packages are not published yet.`,
+    prereleaseLink: (n: string) => `Get notified when ${n} launches`,
+    agentsTitle: (n: string) => `${n} works with the agents you already use`,
+    agentsNote: "Any other MCP-compatible client works too — one config entry, stdio by default.",
+    readDocs: "Read the docs",
+    related: "Also available",
+    relatedTitle: (sw: string) => `Other MCP integrations that pair with ${sw}`,
+    viewIntegration: "View integration",
+    allCount: (n: number) => `${n} integrations available`,
+    allDesc: "Compare tool lists, support matrices and policies for every supported application.",
+    browseAll: "Browse all integrations",
+    skipLater: "Skip to the FAQ",
+  },
+  zh: {
+    overview: "概述",
+    whatIs: (n: string) => `什么是 ${n}？`,
+    whyBreaks: "为什么会失败",
+    whyBreaksTitle: (sw: string) => `没有契约时，让 Agent 驱动 ${sw} 会出什么问题`,
+    howWorks: "如何工作",
+    howWorksTitle: (n: string) => `${n} 如何保住设计意图、结构与可追溯性`,
+    tools: "工具参考",
+    toolsTitle: (n: string) => `${n} 工具清单与风险等级`,
+    toolsDesc: "Agent 在连接时就能发现这份清单。你可以决定哪些自动放行、哪些需要人工确认、哪些在生产文件中直接禁用。",
+    tool: "工具",
+    description: "说明",
+    access: "权限",
+    install: "安装",
+    installTitle: (n: string) => `四步安装 ${n}`,
+    installDesc: (sw: string) => `全部本地运行。服务默认只绑定回环地址，且只暴露你在 ${sw} 中批准的工具。`,
+    prerelease: "预发布。",
+    prereleaseBody: () => "以下命令描述的是我们即将发布的接口，软件包尚未发布。",
+    prereleaseLink: (n: string) => `订阅 ${n} 发布通知`,
+    agentsTitle: (n: string) => `${n} 兼容你正在使用的 Agent`,
+    agentsNote: "任何其他兼容 MCP 的客户端同样可用——只需一条配置，默认走 stdio。",
+    readDocs: "阅读文档",
+    related: "其他集成",
+    relatedTitle: (sw: string) => `常与 ${sw} 搭配使用的其他 MCP 集成`,
+    viewIntegration: "查看集成",
+    allCount: (n: number) => `共 ${n} 个集成`,
+    allDesc: "对比每个受支持软件的工具清单、版本支持矩阵与策略配置。",
+    browseAll: "浏览全部集成",
+    skipLater: "跳到常见问题",
+  },
+} as const;
+
+
+
+export function integrationMetadata(slug: string, locale: Locale = "en") {
+  const base = getIntegration(slug);
+  const zh = locale === "zh" ? getIntegrationZh(slug) : undefined;
+  const integration = base
+    ? { ...base, metaTitle: zh?.tagline ? `${base.name} — 用 AI Agent 连接 ${base.software}` : base.metaTitle, metaDescription: zh?.summary ?? base.metaDescription }
+    : undefined;
   if (!integration) throw new Error(`Unknown integration: ${slug}`);
 
   return {
@@ -92,11 +163,41 @@ function StructuredData({ integration }: { integration: Integration }) {
   );
 }
 
-export function IntegrationPage({ slug }: { slug: string }) {
-  const integration = getIntegration(slug);
-  if (!integration) return null;
+/** Merge the Chinese overrides over the English record. */
+function localize(integration: Integration, locale: Locale) {
+  if (locale === "en") return { ...integration, toolNote: undefined as string | undefined };
+
+  const zh = getIntegrationZh(integration.slug);
+  if (!zh) return { ...integration, toolNote: undefined as string | undefined };
+
+  return {
+    ...integration,
+    tagline: zh.tagline,
+    summary: zh.summary,
+    heroLead: zh.heroLead,
+    problems: zh.problems,
+    workflows: zh.workflows,
+    install: integration.install.map((step, index) => ({
+      ...step,
+      title: zh.install[index]?.title ?? step.title,
+      body: zh.install[index]?.body ?? step.body,
+    })),
+    faq: zh.faq,
+    specs: integration.specs.map((spec) => ({
+      ...spec,
+      label: zh.specLabels[spec.label] ?? spec.label,
+    })),
+    toolNote: zh.toolNote,
+  };
+}
+
+export function IntegrationPage({ slug, locale = "en" }: { slug: string; locale?: Locale }) {
+  const record = getIntegration(slug);
+  if (!record) return null;
+  const integration = localize(record, locale);
 
   const related = relatedIntegrations(integration.slug, 3);
+  const copy = T[locale];
   const reviewed = integration.updated ?? LAST_REVIEWED_FALLBACK;
   const highlights = integration.tools.slice(0, 4).map((tool) => tool.name);
   const sampleTools = highlights.length
@@ -216,8 +317,8 @@ export function IntegrationPage({ slug }: { slug: string }) {
       <Section className="border-y border-line/60 bg-ink-deep/40 py-16">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-14">
           <SectionHeading
-            eyebrow="Overview"
-            title={`What is ${integration.name}?`}
+            eyebrow={copy.overview}
+            title={copy.whatIs(integration.name)}
             className="lg:sticky lg:top-24 lg:self-start"
           />
           <Reveal from="right" className="flex flex-col gap-5">
@@ -255,8 +356,8 @@ export function IntegrationPage({ slug }: { slug: string }) {
       {/* Problems */}
       <Section className="border-b border-line/60">
         <SectionHeading
-          eyebrow="Why it breaks"
-          title={`What goes wrong when agents drive ${integration.software} without a contract`}
+          eyebrow={copy.whyBreaks}
+          title={copy.whyBreaksTitle(integration.software)}
         />
         <StaggerGroup className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line/60 md:grid-cols-3">
           {integration.problems.map((problem, index) => (
@@ -276,8 +377,8 @@ export function IntegrationPage({ slug }: { slug: string }) {
       {/* How the integration solves it */}
       <Section>
         <SectionHeading
-          eyebrow="How it works"
-          title={`How ${integration.name} keeps intent, structure and traceability intact`}
+          eyebrow={copy.howWorks}
+          title={copy.howWorksTitle(integration.name)}
           description={integration.summary}
         />
         <StaggerGroup className="mt-12 grid gap-5 sm:grid-cols-2">
@@ -296,21 +397,29 @@ export function IntegrationPage({ slug }: { slug: string }) {
       {/* Tool reference */}
       <Section id="tools" className="border-y border-line/60 bg-ink-deep/40">
         <SectionHeading
-          eyebrow="Tool reference"
-          title={`${integration.name} tools — every tool and its risk class`}
-          description="Agents discover this list at connect time. You decide which entries are auto-approved, which need a human and which are denied in production files."
+          eyebrow={copy.tools}
+          title={copy.toolsTitle(integration.name)}
+          description={copy.toolsDesc}
         />
+
+        {integration.toolNote ? (
+          <Reveal className="mt-8">
+            <p className="rounded-xl border border-line bg-panel/60 px-4 py-3 text-[13px] text-muted">
+              {integration.toolNote}
+            </p>
+          </Reveal>
+        ) : null}
 
         <Reveal className="mt-10 overflow-hidden rounded-2xl border border-line">
           <div className="hidden grid-cols-[minmax(0,1fr)_minmax(0,2.2fr)_auto] gap-4 border-b border-line bg-panel-raised px-5 py-3 md:grid">
             <span className="font-mono text-[10.5px] tracking-[0.14em] text-muted uppercase">
-              Tool
+              {copy.tool}
             </span>
             <span className="font-mono text-[10.5px] tracking-[0.14em] text-muted uppercase">
-              Description
+              {copy.description}
             </span>
             <span className="font-mono text-[10.5px] tracking-[0.14em] text-muted uppercase">
-              Access
+              {copy.access}
             </span>
           </div>
           <ul className="divide-y divide-line/60">
@@ -331,17 +440,16 @@ export function IntegrationPage({ slug }: { slug: string }) {
       {/* Install */}
       <Section id="install">
         <SectionHeading
-          eyebrow="Install"
-          title={`Install ${integration.name} in four steps`}
-          description={`Everything runs locally. The server binds to loopback by default and only exposes the tools you approve in ${integration.software}.`}
+          eyebrow={copy.install}
+          title={copy.installTitle(integration.name)}
+          description={copy.installDesc(integration.software)}
         />
 
         <Reveal className="mt-8">
           <div className="flex items-start gap-3 rounded-xl border border-amber-400/25 bg-amber-400/8 px-4 py-3.5">
             <Clock className="mt-0.5 h-4 w-4 shrink-0 text-amber-200" weight="bold" />
             <p className="text-[13px] leading-relaxed text-amber-100">
-              <span className="font-medium">Pre-release.</span> These commands describe the interface
-              we are shipping — the packages are not published yet.{" "}
+              <span className="font-medium">{copy.prerelease}</span> {copy.prereleaseBody(integration.name)}{" "}
               <Link href="/download" className="underline decoration-amber-200/40 underline-offset-4">
                 Get notified when {integration.name} launches
               </Link>
@@ -403,8 +511,8 @@ export function IntegrationPage({ slug }: { slug: string }) {
       {/* Related integrations: same category first. */}
       <Section className="border-t border-line/60">
         <SectionHeading
-          eyebrow="Also available"
-          title={`Other MCP integrations that pair with ${integration.software}`}
+          eyebrow={copy.related}
+          title={copy.relatedTitle(integration.software)}
         />
         <StaggerGroup className="mt-10 grid gap-4 md:grid-cols-3">
           {related.map((item) => (
@@ -416,7 +524,7 @@ export function IntegrationPage({ slug }: { slug: string }) {
                 <h3 className="text-[16px] font-medium text-fg">{item.name}</h3>
                 <p className="text-[13px] leading-relaxed text-muted">{item.tagline}</p>
                 <span className="mt-auto inline-flex items-center gap-1.5 text-[13px] text-mint">
-                  View integration
+                  {copy.viewIntegration}
                   <ArrowRight
                     className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5"
                     weight="bold"
@@ -447,7 +555,7 @@ export function IntegrationPage({ slug }: { slug: string }) {
         </Reveal>
       </Section>
 
-      <Faq id="faq" items={integration.faq} />
+      <Faq id="faq" items={integration.faq} locale={locale} />
       <FinalCta />
     </>
   );
