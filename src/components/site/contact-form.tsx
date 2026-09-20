@@ -356,7 +356,8 @@ export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
 
       {siteKey ? (
         <div className="flex flex-col gap-2">
-          <div ref={widgetRef} />
+          {/* data attribute so the widget can be asserted in a built page */}
+          <div ref={widgetRef} data-turnstile-widget="" />
           {captchaBroken ? (
             <span className="text-[12px] text-amber-200">{t.captchaUnavailable}</span>
           ) : null}
