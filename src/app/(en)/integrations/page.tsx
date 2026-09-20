@@ -104,7 +104,7 @@ export default function IntegrationsPage() {
               <p className="mt-5 max-w-[64ch] text-[16px] leading-relaxed text-muted sm:text-[17px]">
                 {integrations.length} integrations, {toolCount}+ typed tools, one contract. Each pairs
                 a local MCP server with a native plugin for the host application, so agents get
-                typed tools while you keep policy enforcement, checkpoints and an audit trail. These
+                typed tools while you keep policy enforcement and an audit trail. These
                 are independent third-party integrations: we build the MCP layer only, and we are not
                 affiliated with, endorsed by or sponsored by any vendor or project we connect to —
                 whether or not it is named on this page.

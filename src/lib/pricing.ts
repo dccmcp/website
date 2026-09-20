@@ -38,6 +38,7 @@ export const plans: Plan[] = [
     cta: { label: "Start 14-day trial", href: "/pricing#compare" },
     includes: [
       "Everything in Community",
+      "Checkpoints and rollback for write tools",
       "Multi-instance and headless/batch control",
       "Audit logs with 90-day retention",
       "Team policy profiles and approval gates",
@@ -85,7 +86,7 @@ export const compare: CompareRow[] = [
     rows: [
       { feature: "Safety policy profiles", community: "1 local", studio: "Shared team", enterprise: "Shared + enforced" },
       { feature: "Approval gates for write tools", community: "Basic", studio: true, enterprise: "Custom rules" },
-      { feature: "Checkpoints and rollback", community: true, studio: true, enterprise: true },
+      { feature: "Checkpoints and rollback", community: false, studio: true, enterprise: true },
       { feature: "Read-only default", community: true, studio: true, enterprise: true },
     ],
   },
@@ -117,7 +118,7 @@ export const pricingFaq = [
   },
   {
     q: "Do I need a paid plan to try an integration?",
-    a: "No. The Community plan includes every public integration with a read-only-by-default policy. Upgrade when you need write access in shared or production files.",
+    a: "No. The Community plan includes every public integration with a read-only-by-default policy. Upgrade when you need write access in shared or production files — and specifically the checkpoints and rollback that make a destructive call recoverable.",
   },
   {
     q: "Does my data leave my machine?",

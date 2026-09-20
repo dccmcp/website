@@ -13,7 +13,7 @@ export function PricingPreview() {
       <SectionHeading
         eyebrow="Pricing"
         title="Free at launch, upgrade when a team depends on it"
-        description="The Community plan includes every public integration with a read-only default. Studio and Enterprise add the governance, scale and support that production pipelines need."
+        description="The Community plan includes every public integration with a read-only default. Studio and Enterprise add the safety layer production pipelines need — checkpointed writes with rollback — plus governance, scale and support."
       />
 
       <StaggerGroup className="mt-12 grid gap-5 lg:grid-cols-3">

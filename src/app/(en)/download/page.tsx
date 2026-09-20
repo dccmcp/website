@@ -34,7 +34,6 @@ const included = [
   "Every public integration — all 10 products, no feature gating",
   "Full typed tool surface for each host application",
   "Safety policy engine with a read-only default",
-  "Checkpoints and rollback for write tools",
   "Local audit log",
   `${toolCount}+ typed tools, updated as host applications ship`,
 ];
@@ -50,7 +49,7 @@ const faq = [
   },
   {
     q: "Will the Community edition be free?",
-    a: "Yes. Every integration and every tool is available on the free Community edition, with a read-only default policy. Paid plans add governance and scale — shared policy profiles, approval workflows, longer audit retention, SIEM export, multi-instance orchestration and support — not a restricted tool surface.",
+    a: "Yes. Every integration and every tool is available on the free Community edition, with a read-only default policy. Paid plans add the safety and operational layer — checkpointed writes with rollback, shared policy profiles, approval workflows, longer audit retention, SIEM export, multi-instance orchestration and support — rather than a restricted tool surface.",
   },
   {
     q: "Which agents will it work with?",
