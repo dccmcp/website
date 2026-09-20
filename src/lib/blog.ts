@@ -1,8 +1,22 @@
 import fs from "node:fs";
 import path from "node:path";
 import matter from "gray-matter";
+import type { Locale } from "@/i18n/config";
 
-const BLOG_DIR = path.join(process.cwd(), "src/content/blog");
+/**
+ * English posts live at src/content/blog, Chinese posts in the zh/ subfolder.
+ * readdirSync is not recursive, so the English listing never picks up the
+ * Chinese files even though they sit underneath it.
+ */
+const BLOG_DIRS: Record<Locale, string> = {
+  en: path.join(process.cwd(), "src/content/blog"),
+  zh: path.join(process.cwd(), "src/content/blog/zh"),
+};
+
+const DATE_LOCALES: Record<Locale, string> = {
+  en: "en-US",
+  zh: "zh-CN",
+};
 
 export type PostMeta = {
   slug: string;
@@ -17,9 +31,9 @@ export type PostMeta = {
 
 export type Post = PostMeta & { content: string };
 
-function readPost(fileName: string): Post {
+function readPost(dir: string, fileName: string): Post {
   const slug = fileName.replace(/\.mdx?$/, "");
-  const raw = fs.readFileSync(path.join(BLOG_DIR, fileName), "utf8");
+  const raw = fs.readFileSync(path.join(dir, fileName), "utf8");
   const { data, content } = matter(raw);
 
   return {
@@ -35,23 +49,24 @@ function readPost(fileName: string): Post {
   };
 }
 
-export function getAllPosts(): Post[] {
-  if (!fs.existsSync(BLOG_DIR)) return [];
+export function getAllPosts(locale: Locale = "en"): Post[] {
+  const dir = BLOG_DIRS[locale];
+  if (!fs.existsSync(dir)) return [];
   return fs
-    .readdirSync(BLOG_DIR)
+    .readdirSync(dir)
     .filter((file) => /\.mdx?$/.test(file))
-    .map(readPost)
+    .map((file) => readPost(dir, file))
     .sort((a, b) => (a.date < b.date ? 1 : -1));
 }
 
-export function getPost(slug: string): Post | undefined {
-  return getAllPosts().find((post) => post.slug === slug);
+export function getPost(slug: string, locale: Locale = "en"): Post | undefined {
+  return getAllPosts(locale).find((post) => post.slug === slug);
 }
 
-export function formatDate(date: string) {
-  return new Date(date).toLocaleDateString("en-US", {
+export function formatDate(date: string, locale: Locale = "en") {
+  return new Date(date).toLocaleDateString(DATE_LOCALES[locale], {
     year: "numeric",
-    month: "short",
+    month: locale === "zh" ? "long" : "short",
     day: "numeric",
     timeZone: "UTC",
   });

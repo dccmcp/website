@@ -14,70 +14,73 @@ import { Badge } from "@/components/ui/badge";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Enterprise — SSO, self-hosting and private MCP bridges",
+  title: "企业版 —— SSO、自托管与私有 MCP 桥接",
   description:
-    "DCCMCP Enterprise adds SSO/SAML, SCIM, self-hosted or air-gapped deployment, unlimited audit retention, SIEM export, signed builds and custom integrations for Blender, Rhino, FreeCAD, QGIS, OpenCV and in-house tools.",
-  alternates: { canonical: "/enterprise", languages: { en: "/enterprise", "zh-CN": "/zh/enterprise" } },
+    "DCCMCP 企业版提供 SSO/SAML、SCIM、自托管或内网隔离部署、无上限审计留存、SIEM 导出、签名构建，以及针对 Blender、Rhino、FreeCAD、QGIS、OpenCV 和自研工具的定制集成。",
+  alternates: {
+    canonical: "/zh/enterprise",
+    languages: { en: "/enterprise", "zh-CN": "/zh/enterprise" },
+  },
   keywords: [
-    "enterprise MCP server",
-    "self-hosted MCP",
-    "air-gapped MCP deployment",
-    "custom CAD integration",
+    "企业级 MCP Server",
+    "自托管 MCP",
+    "内网隔离 MCP 部署",
+    "定制 CAD 集成",
   ],
 };
 
 const pillars = [
   {
     icon: Lock,
-    title: "Identity and access",
-    body: "SSO/SAML, SCIM provisioning and role-based access control. Permissions map to your existing groups, so a TD can grant agent write access to one team and not another.",
+    title: "身份与权限",
+    body: "SSO/SAML、SCIM 目录同步与基于角色的访问控制。权限直接映射到你们现有的用户组，技术总监可以只给某个团队开放 Agent 写权限，其他团队不受影响。",
   },
   {
     icon: CloudSlash,
-    title: "Self-hosted or air-gapped",
-    body: "Run the control plane inside your network with no outbound dependency. Update packages can be mirrored internally, and license checks work offline.",
+    title: "自托管或内网隔离",
+    body: "控制平面可以完全跑在你们内网，不依赖任何外发连接。更新包支持内网镜像，许可证校验同样可离线完成。",
   },
   {
     icon: FileCode,
-    title: "Private integrations",
-    body: "We build bridges for Maya, Houdini, Revit, Civil 3D, Ansys, KiCad, proprietary CAD or your in-house asset system — with the same tool contract as public integrations.",
+    title: "私有集成",
+    body: "我们为 Maya、Houdini、Revit、Civil 3D、Ansys、KiCad、专有 CAD 或你们的自研资产系统构建桥接，工具契约与公开集成完全一致。",
   },
   {
     icon: UsersThree,
-    title: "Governance at scale",
-    body: "Unlimited audit retention, SIEM and webhook export, approval workflows routed to reviewers, and per-project policy enforcement.",
+    title: "规模化治理",
+    body: "无上限审计留存、SIEM 与 Webhook 导出、可路由到指定审核人的审批流，以及按项目生效的策略。",
   },
   {
     icon: Handshake,
-    title: "Named support",
-    body: "A solutions engineer who knows your pipeline, a 99.9% support SLA, and a defined response window for vendor version breakage.",
+    title: "具名支持",
+    body: "一位熟悉你们流水线的解决方案工程师、99.9% 支持 SLA，以及针对宿主软件版本变更的明确响应时限。",
   },
   {
     icon: Buildings,
-    title: "Procurement-ready",
-    body: "Signed builds, SBOM delivery, security questionnaires, DPA and standard enterprise terms. We work with your legal and IT teams directly.",
+    title: "可直接走采购",
+    body: "签名构建、SBOM 交付、安全问卷、DPA 与标准企业条款。我们直接对接你们的法务与 IT 团队。",
   },
 ];
 
 const steps = [
   {
     step: "01",
-    title: "Technical scoping call",
-    body: "45 minutes with an engineer. We map your software, the tasks you want automated, and the write access you are uncomfortable granting.",
+    title: "技术范围沟通",
+    body: "与工程师开 45 分钟会。我们梳理你使用的软件、希望自动化的任务，以及你不放心授予的写权限。",
   },
   {
     step: "02",
-    title: "Pilot on one workflow",
-    body: "We deploy against a single real workflow in a copy of your production data, with a read-only policy, and measure where the agent actually helps.",
+    title: "在单条流程上试点",
+    body: "我们在生产数据的副本上，用只读策略部署一条真实流程，并衡量 Agent 到底在哪里帮上了忙。",
   },
   {
     step: "03",
-    title: "Rollout with policy",
-    body: "We write your policy profiles, wire approvals into your review process and connect audit export to your monitoring stack.",
+    title: "带策略地推广",
+    body: "我们编写你们的策略配置、把审批接入现有评审流程，并将审计导出接到你们的监控系统。",
   },
 ];
 
-export default function EnterprisePage() {
+export default function ChineseEnterprisePage() {
   return (
     <>
       <section className="relative isolate overflow-hidden pt-28 pb-14 sm:pt-32 lg:pt-36">
@@ -87,37 +90,34 @@ export default function EnterprisePage() {
           <div className="grid gap-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-14">
             <div className="flex flex-col gap-6">
               <Reveal>
-                <Eyebrow>Enterprise</Eyebrow>
+                <Eyebrow>企业版</Eyebrow>
               </Reveal>
               <Reveal delay={0.05}>
-                <h1 className="text-balance-tight text-[32px] leading-[1.08] font-semibold text-fg sm:text-[42px] lg:text-[48px] lg:leading-[1.05]">
-                  Agent automation that passes your security review
+                <h1 className="text-balance-tight text-[32px] leading-[1.16] font-semibold text-fg sm:text-[42px] lg:text-[48px] lg:leading-[1.12]">
+                  能通过你们安全审查的 Agent 自动化
                 </h1>
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="max-w-[58ch] text-[16px] leading-relaxed text-muted sm:text-[17px]">
-                  Large studios and engineering teams do not fail at connecting a model to software.
-                  They fail at governance: who approved the write access, where the logs live, and
-                  what happens when a vendor ships a breaking update. Enterprise answers those
-                  questions before your procurement team asks them.
+                  大型工作室与工程团队的难点从来不是把模型接上软件，而是治理：写权限是谁批的、日志存在哪里、供应商发布破坏性更新时怎么办。企业版会在采购团队提出这些问题之前，就把答案准备好。
                 </p>
               </Reveal>
               <Reveal delay={0.15}>
                 <div className="flex flex-wrap gap-3">
                   <Badge tone="mint">SSO / SAML</Badge>
                   <Badge tone="mint">SCIM</Badge>
-                  <Badge tone="mint">Air-gapped</Badge>
-                  <Badge tone="mint">Signed builds</Badge>
-                  <Badge tone="mint">SIEM export</Badge>
+                  <Badge tone="mint">内网隔离</Badge>
+                  <Badge tone="mint">签名构建</Badge>
+                  <Badge tone="mint">SIEM 导出</Badge>
                   <Badge tone="mint">99.9% SLA</Badge>
                 </div>
               </Reveal>
               <Reveal delay={0.2}>
                 <dl className="grid grid-cols-1 gap-px overflow-hidden rounded-xl border border-line bg-line/60 sm:grid-cols-3">
                   {[
-                    { k: "5 days", v: "typical pilot to first result" },
-                    { k: "Offline", v: "license and update mirroring" },
-                    { k: "1 engineer", v: "named on your account" },
+                    { k: "5 天", v: "从试点到首个结果" },
+                    { k: "离线", v: "许可证与更新镜像" },
+                    { k: "1 名工程师", v: "具名负责你的账号" },
                   ].map((item) => (
                     <div key={item.v} className="bg-panel px-4 py-3.5">
                       <dt className="font-mono text-[15px] text-fg">{item.k}</dt>
@@ -130,12 +130,11 @@ export default function EnterprisePage() {
 
             <Reveal from="right" delay={0.1} className="lg:sticky lg:top-24 lg:self-start">
               <div className="glass rounded-2xl p-6 sm:p-7">
-                <h2 className="text-[18px] font-medium text-fg">Talk to us about your deployment</h2>
+                <h2 className="text-[18px] font-medium text-fg">聊聊你的部署方案</h2>
                 <p className="mt-2 mb-6 text-[13.5px] leading-relaxed text-muted">
-                  Enterprise and private-bridge enquiries only. If you just want to try DCCMCP,
-                  the Community edition is a free download — no call required.
+                  仅受理企业版与私有桥接咨询。如果你只是想试用 DCCMCP，社区版可直接免费下载，无需预约通话。
                 </p>
-                <ContactForm />
+                <ContactForm locale="zh" />
               </div>
             </Reveal>
           </div>
@@ -144,9 +143,9 @@ export default function EnterprisePage() {
 
       <Section className="border-y border-line/60 bg-ink-deep/40">
         <SectionHeading
-          eyebrow="What enterprise adds"
-          title="The controls your IT team will ask about"
-          description="Studio covers the workflow. Enterprise covers the paperwork, the access model and the failure modes that only show up at organizational scale."
+          eyebrow="企业版多了什么"
+          title="IT 团队一定会问的那些控制项"
+          description="Studio 覆盖工作流，企业版覆盖流程合规、访问模型，以及只有在组织规模上才会暴露的失效模式。"
         />
         <StaggerGroup className="mt-12 grid gap-px overflow-hidden rounded-2xl border border-line bg-line/60 md:grid-cols-2 lg:grid-cols-3">
           {pillars.map((pillar) => (
@@ -161,9 +160,9 @@ export default function EnterprisePage() {
 
       <Section>
         <SectionHeading
-          eyebrow="How onboarding works"
-          title="Pilot on one workflow, then widen"
-          description="Nobody should approve blanket agent access on day one. We start narrow, measure, and expand only where the results justify it."
+          eyebrow="上线流程"
+          title="先试点一条流程，再逐步放开"
+          description="没有人应该在第一天就批准 Agent 的全面访问权限。我们从最窄的范围开始、用数据衡量，只在结果站得住脚的地方扩大。"
         />
         <StaggerGroup className="mt-12 grid gap-5 md:grid-cols-3">
           {steps.map((item) => (
@@ -179,42 +178,40 @@ export default function EnterprisePage() {
       <Section id="contact" className="border-t border-line/60">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
           <div className="flex flex-col gap-5">
-            <Eyebrow>Contact</Eyebrow>
+            <Eyebrow>联系我们</Eyebrow>
             <h2 className="text-balance-tight text-3xl font-semibold text-fg sm:text-4xl">
-              Enterprise and private bridges
+              企业版与私有桥接
             </h2>
             <p className="max-w-[52ch] text-[14.5px] leading-relaxed text-muted">
-              Enterprise enquiries go to the engineers who build the integrations. If we are not the
-              right fit, we will tell you on the first call.
+              企业咨询由构建集成的工程师本人处理。如果我们不适合你，第一次通话就会直接说明。
             </p>
             <div className="mt-2 flex flex-col gap-1.5 text-[14px]">
               <a className="text-mint hover:text-mint-bright" href={`mailto:${site.email}`}>
                 {site.email}
               </a>
               <p className="text-[13px] text-muted/80">
-                Sales, security questionnaires and procurement all reach the same inbox — mention
-                which one you need and we will route it.
+                销售、安全问卷与采购都会进同一个收件箱——说明你需要哪一类，我们会分派给对应的人。
               </p>
             </div>
             <dl className="mt-4 grid grid-cols-2 gap-4 border-t border-line pt-5 text-[13px]">
               <div className="flex flex-col gap-1">
                 <dt className="font-mono text-[10.5px] tracking-[0.14em] text-muted uppercase">
-                  Response time
+                  响应时间
                 </dt>
-                <dd className="text-fg">1 business day</dd>
+                <dd className="text-fg">1 个工作日</dd>
               </div>
               <div className="flex flex-col gap-1">
                 <dt className="font-mono text-[10.5px] tracking-[0.14em] text-muted uppercase">
-                  Timezone coverage
+                  时区覆盖
                 </dt>
-                <dd className="text-fg">EU · APAC · Americas</dd>
+                <dd className="text-fg">欧洲 · 亚太 · 美洲</dd>
               </div>
             </dl>
           </div>
 
           <Reveal from="right">
             <div className="panel rounded-2xl p-6 sm:p-7">
-              <ContactForm />
+              <ContactForm locale="zh" />
             </div>
           </Reveal>
         </div>

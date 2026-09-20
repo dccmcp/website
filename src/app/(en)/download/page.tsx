@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Coming soon — DCCMCP packages are not published yet",
   description:
     "DCCMCP integrations for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD, QGIS and OpenCV are in private testing. Packages publish soon — email support@dccmcp.com to be notified.",
-  alternates: { canonical: "/download" },
+  alternates: { canonical: "/download", languages: { en: "/download", "zh-CN": "/zh/download" } },
   keywords: [
     "DCCMCP release date",
     "MCP server for Blender download",

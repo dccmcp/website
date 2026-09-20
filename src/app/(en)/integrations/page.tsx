@@ -12,7 +12,7 @@ export const metadata: Metadata = {
   title: "All Integrations — MCP Servers for Blender, Maya, Houdini, Rhino, Photoshop",
   description:
     "Every DCCMCP integration in one place: MCP Servers for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD, QGIS and OpenCV, plus private bridges for in-house software.",
-  alternates: { canonical: "/integrations" },
+  alternates: { canonical: "/integrations", languages: { en: "/integrations", "zh-CN": "/zh/integrations" } },
   keywords: [
     "MCP for Blender",
     "MCP for Maya",

@@ -5,20 +5,93 @@ import { CheckCircle, WarningCircle, PaperPlaneTilt, CircleNotch } from "@phosph
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-const softwareOptions = [
-  "Blender",
-  "Rhino / Grasshopper",
-  "FreeCAD",
-  "QGIS",
-  "OpenCV",
-  "Something else / in-house",
-];
+type ContactFormLocale = "en" | "zh";
 
-const teamSizes = ["Just me", "2–10", "11–50", "51–200", "200+"];
+/**
+ * Copy for the enquiry form. `value` is what gets POSTed to /api/contact and
+ * stays in English in every locale so the transport keeps parsing it the same
+ * way regardless of which site the visitor submitted from.
+ */
+const copy = {
+  en: {
+    name: "Name",
+    workEmail: "Work email",
+    company: "Company",
+    teamSize: "Team size",
+    softwareLegend: "Which software are you connecting?",
+    softwareOptions: [
+      { value: "Blender", label: "Blender" },
+      { value: "Rhino / Grasshopper", label: "Rhino / Grasshopper" },
+      { value: "FreeCAD", label: "FreeCAD" },
+      { value: "QGIS", label: "QGIS" },
+      { value: "OpenCV", label: "OpenCV" },
+      { value: "Something else / in-house", label: "Something else / in-house" },
+    ],
+    teamSizes: [
+      { value: "Just me", label: "Just me" },
+      { value: "2\u201310", label: "2\u201310" },
+      { value: "11\u201350", label: "11\u201350" },
+      { value: "51\u2013200", label: "51\u2013200" },
+      { value: "200+", label: "200+" },
+    ],
+    messageLabel: "What are you trying to deploy?",
+    messagePlaceholder:
+      "Team, pipeline, the software involved, and what you want an agent to be allowed to do.",
+    send: "Send enquiry",
+    sending: "Sending",
+    orEmail: "Or email",
+    success: "Received. We reply to every enterprise enquiry within one business day.",
+    genericError:
+      "Something went wrong sending that. Email support@dccmcp.com and we will pick it up from there.",
+    networkError:
+      "We could not reach the server. Email support@dccmcp.com and we will continue over email.",
+    fieldErrors: {
+      name: "Please enter your name.",
+      email: "Please enter a valid work email address.",
+      message: "Please describe what you are trying to deploy.",
+    } as Record<string, string>,
+  },
+  zh: {
+    name: "姓名",
+    workEmail: "工作邮箱",
+    company: "公司",
+    teamSize: "团队规模",
+    softwareLegend: "你要接入哪些软件？",
+    softwareOptions: [
+      { value: "Blender", label: "Blender" },
+      { value: "Rhino / Grasshopper", label: "Rhino / Grasshopper" },
+      { value: "FreeCAD", label: "FreeCAD" },
+      { value: "QGIS", label: "QGIS" },
+      { value: "OpenCV", label: "OpenCV" },
+      { value: "Something else / in-house", label: "其他软件 / 自研工具" },
+    ],
+    teamSizes: [
+      { value: "Just me", label: "只有我" },
+      { value: "2\u201310", label: "2\u201310 人" },
+      { value: "11\u201350", label: "11\u201350 人" },
+      { value: "51\u2013200", label: "51\u2013200 人" },
+      { value: "200+", label: "200 人以上" },
+    ],
+    messageLabel: "你想部署什么？",
+    messagePlaceholder: "团队、流水线、涉及的软件，以及你希望 Agent 被允许做什么。",
+    send: "发送咨询",
+    sending: "发送中",
+    orEmail: "或者直接写邮件到",
+    success: "已收到。我们会在一个工作日内回复每一封企业咨询。",
+    genericError: "发送出了点问题。请写信到 support@dccmcp.com，我们会接着处理。",
+    networkError: "无法连上服务器。请写信到 support@dccmcp.com，我们继续用邮件沟通。",
+    fieldErrors: {
+      name: "请填写你的姓名。",
+      email: "请填写有效的工作邮箱。",
+      message: "请描述一下你想部署的内容。",
+    } as Record<string, string>,
+  },
+};
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export function ContactForm() {
+export function ContactForm({ locale = "en" }: { locale?: ContactFormLocale }) {
+  const t = copy[locale];
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
@@ -56,48 +129,56 @@ export function ContactForm() {
 
       if (!response.ok) {
         setStatus("error");
-        setFieldErrors(payload.fields ?? {});
-        setMessage(
-          payload.message ??
-            "Something went wrong sending that. Email support@dccmcp.com and we will pick it up from there.",
+        // Field messages come back from the API in English; substitute the
+        // local wording for the keys we know about.
+        const fields = payload.fields ?? {};
+        setFieldErrors(
+          Object.fromEntries(
+            Object.entries(fields).map(([key, value]) => [key, t.fieldErrors[key] ?? value]),
+          ),
         );
+        setMessage(payload.message ?? t.genericError);
         return;
       }
 
       setStatus("success");
-      setMessage("Received. We reply to every enterprise enquiry within one business day.");
+      setMessage(t.success);
       form.reset();
     } catch {
       setStatus("error");
-      setMessage(
-        "We could not reach the server. Email support@dccmcp.com and we will continue over email.",
-      );
+      setMessage(t.networkError);
     }
   }
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col gap-5" noValidate>
       <div className="grid gap-5 sm:grid-cols-2">
-        <Field label="Name" name="name" autoComplete="name" error={fieldErrors.name} required />
         <Field
-          label="Work email"
+          label={t.name}
+          name="name"
+          autoComplete="name"
+          error={fieldErrors.name}
+          required
+        />
+        <Field
+          label={t.workEmail}
           name="email"
           type="email"
           autoComplete="email"
           error={fieldErrors.email}
           required
         />
-        <Field label="Company" name="company" autoComplete="organization" />
+        <Field label={t.company} name="company" autoComplete="organization" />
         <label className="flex flex-col gap-2">
-          <span className="text-[12.5px] font-medium text-fg">Team size</span>
+          <span className="text-[12.5px] font-medium text-fg">{t.teamSize}</span>
           <select
             name="teamSize"
             defaultValue="2–10"
             className="h-11 rounded-lg border border-line bg-panel px-3 text-[14px] text-fg transition-colors outline-none focus:border-mint/60"
           >
-            {teamSizes.map((size) => (
-              <option key={size} value={size} className="bg-panel text-fg">
-                {size}
+            {t.teamSizes.map((size) => (
+              <option key={size.value} value={size.value} className="bg-panel text-fg">
+                {size.label}
               </option>
             ))}
           </select>
@@ -105,36 +186,32 @@ export function ContactForm() {
       </div>
 
       <fieldset className="flex flex-col gap-3">
-        <legend className="mb-1 text-[12.5px] font-medium text-fg">
-          Which software are you connecting?
-        </legend>
+        <legend className="mb-1 text-[12.5px] font-medium text-fg">{t.softwareLegend}</legend>
         <div className="flex flex-wrap gap-2">
-          {softwareOptions.map((option) => (
+          {t.softwareOptions.map((option) => (
             <label
-              key={option}
+              key={option.value}
               className="group inline-flex cursor-pointer items-center gap-2 rounded-lg border border-line bg-panel px-3 py-2 text-[13px] text-muted transition-colors has-checked:border-mint/50 has-checked:bg-mint/10 has-checked:text-mint-bright hover:border-line"
             >
               <input
                 type="checkbox"
                 name="software"
-                value={option}
+                value={option.value}
                 className="checkbox-mint h-4 w-4 shrink-0 appearance-none rounded-[4px] border border-line bg-ink transition-colors checked:border-mint"
               />
-              {option}
+              {option.label}
             </label>
           ))}
         </div>
       </fieldset>
 
       <label className="flex flex-col gap-2">
-        <span className="text-[12.5px] font-medium text-fg">
-          What are you trying to deploy?
-        </span>
+        <span className="text-[12.5px] font-medium text-fg">{t.messageLabel}</span>
         <textarea
           name="message"
           rows={5}
           required
-          placeholder="Team, pipeline, the software involved, and what you want an agent to be allowed to do."
+          placeholder={t.messagePlaceholder}
           className={cn(
             "resize-y rounded-lg border bg-panel px-3.5 py-3 text-[14px] leading-relaxed text-fg transition-colors outline-none placeholder:text-muted/80 focus:border-mint/60",
             fieldErrors.message ? "border-rose-400/60" : "border-line",
@@ -160,17 +237,17 @@ export function ContactForm() {
           {status === "submitting" ? (
             <>
               <CircleNotch className="h-4 w-4 animate-spin" weight="bold" />
-              Sending
+              {t.sending}
             </>
           ) : (
             <>
               <PaperPlaneTilt className="h-4 w-4" weight="bold" />
-              Send enquiry
+              {t.send}
             </>
           )}
         </Button>
         <p className="text-[12px] text-muted">
-          Or email{" "}
+          {t.orEmail}{" "}
           <a className="text-mint hover:text-mint-bright" href="mailto:support@dccmcp.com">
             support@dccmcp.com
           </a>

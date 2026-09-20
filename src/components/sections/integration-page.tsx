@@ -100,7 +100,13 @@ export function integrationMetadata(slug: string, locale: Locale = "en") {
     title: integration.metaTitle,
     description: integration.metaDescription,
     keywords: integration.keywords,
-    alternates: { canonical: `/${integration.slug}` },
+    alternates: {
+      canonical: `/${integration.slug}`,
+      languages: {
+        en: `/${integration.slug}`,
+        "zh-CN": `/zh/${integration.slug}`,
+      },
+    },
     openGraph: {
       title: integration.metaTitle,
       description: integration.metaDescription,

@@ -59,9 +59,13 @@ src/
 │   ├── site/                        # Navbar, Footer, Logo, ContactForm, Analytics
 │   ├── sections/                    # Every landing-page section + integration template
 │   └── visuals/                     # Animated agent session demo, host viewport art
-├── content/blog/*.mdx               # Articles (frontmatter drives metadata + sitemap)
+├── content/blog/*.mdx               # English articles (frontmatter drives metadata + sitemap)
+├── content/blog/zh/*.mdx            # Chinese articles, same slugs as the English originals
 └── lib/                             # integrations, pricing, blog, legal, faq, site config
 ```
+
+Chinese pages are mirrored under `src/app/zh/` with the same slugs as the English tree, so
+`/docs` pairs with `/zh/docs` and the language switcher never has to guess.
 
 ## Editing content
 
@@ -95,6 +99,10 @@ the `ItemList` schema and the related-integrations blocks all read from the same
 `date`, `readingTime`, `category`, `keywords`, optional `featured: true`. Posts are statically
 generated, added to the sitemap, and emitted as `BlogPosting` structured data.
 
+For Chinese, add the same slug under `src/content/blog/zh/` with translated frontmatter and body.
+`getAllPosts("zh")` reads that directory, and the sitemap emits both URLs as hreflang alternates.
+A post without a Chinese twin simply has no `/zh/blog/<slug>` page.
+
 **Legal documents** — `src/lib/legal.ts` holds sectioned content for each document; the route is
 static via `generateStaticParams`.
 
@@ -127,9 +135,14 @@ There is a free Community edition, so nothing gates the product behind a sales c
 
 ## Contact form
 
-`POST /api/contact` validates the payload server-side (including a honeypot) and forwards it to
-`CONTACT_WEBHOOK_URL`. When that variable is not configured the route returns `503` and the form
-tells the visitor to email `sales@dccmcp.com` directly — it never reports a fake success.
+`POST /api/contact` validates the payload server-side (including a honeypot) and then, in order:
+
+1. `RESEND_API_KEY` + `CONTACT_TO_EMAIL` → emails the enquiry (optional `CONTACT_FROM_EMAIL`).
+2. `CONTACT_WEBHOOK_URL` → POSTs the payload as JSON.
+3. Neither configured → `503`, so the form falls back to a `mailto:` link to `support@dccmcp.com`.
+
+It never reports a success it did not achieve. **Production currently has none of these variables
+set on Vercel**, so the form is in fallback mode until one is added — see the deployment checklist.
 
 ## Brand and legal guardrails
 
@@ -149,8 +162,45 @@ tells the visitor to email `sales@dccmcp.com` directly — it never reports a fa
   review. Have them reviewed by counsel before relying on them commercially, and fill in the
   governing-law jurisdiction in the terms.
 
+## Localisation
+
+English is served at the root, Chinese under `/zh`. Both trees are static, and every translated
+pair declares reciprocal `hreflang` alternates plus its own canonical URL.
+
+| Layer | Where it lives |
+| --- | --- |
+| Route mirror | `src/app/zh/**` — same slugs as `src/app/(en)/**` |
+| Chrome strings | `src/i18n/ui.ts` (`chrome[locale]`), consumed by navbar and footer |
+| Path helpers | `src/i18n/config.ts` — `localePath`, `switchLocalePath` |
+| Integration copy | `src/lib/integrations.zh.ts`, keyed by integration slug |
+| Blog posts | `src/content/blog/zh/*.mdx` |
+| Form copy | the `copy` table in `src/components/site/contact-form.tsx` |
+
+Two conventions worth keeping:
+
+- **Tool names, commands, code and host-software product names stay in English.** They are the
+  literal API surface; translating them would make the docs wrong.
+- **Legal documents are English-only on purpose.** `/zh/legal/*` renders the fallback notice,
+  which says why. A machine-translated contract is worse than no translation.
+
+Anything not yet translated falls through to `src/app/zh/[...slug]/page.tsx`, which renders a
+`noindex` notice linking to the English original, so the language switcher can never 404.
+
 ## Deployment
 
 Vercel: import the repository, set `NEXT_PUBLIC_SITE_URL=https://dccmcp.com`, and optionally set
 `NEXT_PUBLIC_ANALYTICS=on` and `CONTACT_WEBHOOK_URL`. Add the `dccmcp.com` domain in the project
 settings. No other build configuration is required.
+
+### Outstanding production setup
+
+Two things are configured outside this repository and are **not done yet**:
+
+1. **`dccmcp.com` has no MX records.** Every "email support@dccmcp.com" call to action on the site
+   — footer, pricing, download, legal, and the contact form's fallback — currently bounces. Fix by
+   turning on Cloudflare Email Routing (free) on the `dccmcp.com` zone and forwarding
+   `support@dccmcp.com` to a real mailbox, or by pointing MX at a mailbox provider. Without MX,
+   fixing item 2 still leaves the site's primary contact path broken.
+2. **No environment variables on the Vercel project.** Until `RESEND_API_KEY` + `CONTACT_TO_EMAIL`
+   (or `CONTACT_WEBHOOK_URL`) exist, `/api/contact` returns `503`. `vercel env ls production`
+   currently reports none.

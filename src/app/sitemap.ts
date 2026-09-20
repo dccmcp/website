@@ -4,40 +4,95 @@ import { getAllPosts } from "@/lib/blog";
 import { legalDocs } from "@/lib/legal";
 import { site } from "@/lib/site";
 
+/**
+ * Pages that exist in both locales. Each pair gets reciprocal hreflang
+ * alternates so search engines treat them as one document, not duplicates.
+ * Legal documents are English-only on purpose and are listed separately.
+ */
+const bilingualPathways = [
+  { path: "/", changeFrequency: "weekly", priority: 1 },
+  { path: "/integrations", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/download", changeFrequency: "weekly", priority: 0.9 },
+  { path: "/pricing", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/docs", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/blog", changeFrequency: "weekly", priority: 0.8 },
+  { path: "/enterprise", changeFrequency: "monthly", priority: 0.7 },
+  { path: "/about", changeFrequency: "yearly", priority: 0.4 },
+] as const;
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  const core: MetadataRoute.Sitemap = [
-    {
-      url: `${site.url}/`,
-      lastModified: now,
-      changeFrequency: "weekly",
-      priority: 1,
-      alternates: { languages: { en: `${site.url}/`, zh: `${site.url}/zh` } },
-    },
-    { url: `${site.url}/zh`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${site.url}/integrations`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${site.url}/download`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
-    { url: `${site.url}/pricing`, lastModified: now, changeFrequency: "monthly", priority: 0.9 },
-    { url: `${site.url}/docs`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${site.url}/blog`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${site.url}/enterprise`, lastModified: now, changeFrequency: "monthly", priority: 0.7 },
-    { url: `${site.url}/about`, lastModified: now, changeFrequency: "yearly", priority: 0.4 },
-  ];
+  const localized: MetadataRoute.Sitemap = bilingualPathways.flatMap((page) => {
+    const enUrl = `${site.url}${page.path === "/" ? "/" : page.path}`;
+    const zhUrl = `${site.url}/zh${page.path === "/" ? "" : page.path}`;
+    const languages = { en: enUrl, zh: zhUrl };
 
-  const integrationPages: MetadataRoute.Sitemap = integrations.map((integration) => ({
-    url: `${site.url}/${integration.slug}`,
-    lastModified: new Date(integration.updated ?? now),
-    changeFrequency: "weekly",
-    priority: integration.featured ? 0.95 : 0.9,
-  }));
+    return [
+      {
+        url: enUrl,
+        lastModified: now,
+        changeFrequency: page.changeFrequency,
+        priority: page.priority,
+        alternates: { languages },
+      },
+      {
+        url: zhUrl,
+        lastModified: now,
+        changeFrequency: page.changeFrequency,
+        priority: page.priority,
+        alternates: { languages },
+      },
+    ];
+  });
 
-  const posts: MetadataRoute.Sitemap = getAllPosts().map((post) => ({
-    url: `${site.url}/blog/${post.slug}`,
-    lastModified: new Date(post.date),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
+  const integrationPages: MetadataRoute.Sitemap = integrations.flatMap((integration) => {
+    const lastModified = new Date(integration.updated ?? now);
+    const enUrl = `${site.url}/${integration.slug}`;
+    const zhUrl = `${site.url}/zh/${integration.slug}`;
+    const languages = { en: enUrl, zh: zhUrl };
+
+    return [
+      {
+        url: enUrl,
+        lastModified,
+        changeFrequency: "weekly" as const,
+        priority: integration.featured ? 0.95 : 0.9,
+        alternates: { languages },
+      },
+      {
+        url: zhUrl,
+        lastModified,
+        changeFrequency: "weekly" as const,
+        priority: integration.featured ? 0.95 : 0.9,
+        alternates: { languages },
+      },
+    ];
+  });
+
+  const posts: MetadataRoute.Sitemap = getAllPosts().flatMap((post) => {
+    const lastModified = new Date(post.date);
+    const enUrl = `${site.url}/blog/${post.slug}`;
+    const zhUrl = `${site.url}/zh/blog/${post.slug}`;
+    const languages = { en: enUrl, zh: zhUrl };
+
+    return [
+      {
+        url: enUrl,
+        lastModified,
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+        alternates: { languages },
+      },
+      {
+        url: zhUrl,
+        lastModified,
+        changeFrequency: "monthly" as const,
+        priority: 0.6,
+        alternates: { languages },
+      },
+    ];
+  });
 
   const legal: MetadataRoute.Sitemap = legalDocs.map((doc) => ({
     url: `${site.url}/legal/${doc.slug}`,
@@ -46,5 +101,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.2,
   }));
 
-  return [...core, ...integrationPages, ...posts, ...legal];
+  return [...localized, ...integrationPages, ...posts, ...legal];
 }

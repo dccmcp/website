@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "About — Why we build MCP integrations for production software",
   description:
     "DCCMCP builds production-grade MCP Servers and plugins for creative and engineering software. Here is what we believe about agent automation in real pipelines.",
-  alternates: { canonical: "/about" },
+  alternates: { canonical: "/about", languages: { en: "/about", "zh-CN": "/zh/about" } },
 };
 
 const principles = [

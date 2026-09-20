@@ -1,0 +1,106 @@
+---
+title: "如何让 AI 安全地操作 Blender（MCP for Blender 实战）"
+description: "一步步把 Claude 或 Cursor 接入真实的 Blender 会话：安装插件、启动 MCP Server、用安全策略保证生产文件不被破坏。"
+date: "2026-08-12"
+readingTime: "9 分钟阅读"
+category: "实战教程"
+featured: true
+keywords:
+  - "MCP for Blender"
+  - "AI 控制 Blender"
+  - "Blender MCP server"
+  - "Claude 连接 Blender"
+---
+
+大多数团队都是同一个开局：让模型写一段 `bpy` 代码，粘进 Blender 的脚本编辑器，然后运行。它经常能跑通，让人兴奋；也经常出错，让人后怕。
+
+这篇教程讲的是一条能扛住生产工作的路线：把 Blender 会话接到 MCP Server 上，并用策略事先规定 Agent 允许做什么。
+
+## 这里的"安全"到底指什么
+
+安全不是某个开关，而是四个属性同时成立：
+
+1. **先看再做。** Agent 在改动场景前，先读取场景。
+2. **类型化操作。** 工具接受 schema，非法输入在边界处就被拒绝。
+3. **可回滚。** 破坏性操作先创建检查点。
+4. **可追溯。** 每次调用都记录参数与结果。
+
+这四点缺任何一条，你就回到了"粘脚本、然后祈祷"的状态。
+
+## 第一步：安装插件
+
+把 DCCMCP 插件装进 Blender，并在 **偏好设置 → 插件** 中启用。插件会打开一条绑定在 `127.0.0.1` 的本地控制通道；除非你之后显式配置远程传输，否则它不会监听公网地址。
+
+```bash
+blender --command extension install dccmcp_blender
+```
+
+## 第二步：启动 MCP Server
+
+在你希望 Agent 工作的项目目录下启动服务：
+
+```bash
+npx dccmcp-blender@latest serve --port 7331
+```
+
+启动时，Server 会发现正在运行的 Blender 会话并发布工具列表。你应该能看到 `scene.inspect`、`object.create`、`geometry_nodes.set_input`、`render.capture` 等工具。
+
+## 第三步：把 Server 注册到你的 Agent
+
+在 MCP 客户端里加上这个 Server。同一条配置对 Claude Desktop、Claude Code 和 Cursor 都适用：
+
+```json
+{
+  "mcpServers": {
+    "blender": {
+      "command": "npx",
+      "args": ["dccmcp-blender", "serve"]
+    }
+  }
+}
+```
+
+重启客户端，确认工具已经列出。第一个提示词请故意"无聊"一点：
+
+> 检查当前的 Blender 场景，告诉我集合结构、对象数量和单位设置。不要修改任何东西。
+
+如果 Agent 报出的是准确结构，说明接线正确；如果它开始编造对象名，那说明 Server 连上的不是你以为的那个文件。
+
+## 第四步：在需要之前就把策略配好
+
+这一步几乎所有人都会跳过，而它恰恰决定了你能不能睡个好觉。
+
+```bash
+dccmcp policy set --profile studio-default
+dccmcp policy allow scene.inspect --auto
+dccmcp policy require-approval object.create mesh.edit geometry_nodes.set_input
+dccmcp policy deny pipeline.checkpoint.restore --in production
+```
+
+`studio-default` 配置档从只读开始：写工具在你批准前一律拒绝，而恢复类操作在匹配生产命名规则的文件里被直接封禁。
+
+![策略配置档输出：读工具自动放行，写工具等待人工确认](/assets/images/blog-blender-policy-terminal.svg)
+
+## 第五步：跑一个真实任务
+
+管道打通之后，工作流就变成正常的对话。一个很好用的模式是：先要方案，再批准执行。
+
+> 看一下 `Facade_Module` 集合。我需要三个变体，窗洞内缩分别是 20 mm、40 mm 和 60 mm。在改动任何东西之前，先把方案给我看。
+
+Agent 会先检查，然后提出一串经过校验的工具调用，接着停下等待。你批准后，它生成三个变体，并调用 `render.capture`，让你不必自己打开文件就能看到结果。
+
+## 这套做法避开了哪些坑
+
+| 过去的方式 | 会出什么问题 | 有策略层之后 |
+| --- | --- | --- |
+| 模型盲写 `bpy` | 猜对象名，执行到一半失败 | `scene.inspect` 提供真实结构 |
+| 算子作用于当前激活对象 | 改错了对象却无人察觉 | 工具必须显式指定目标 |
+| 破坏性调用没有撤销 | 场景损坏，工作丢失 | 先建检查点，随时可恢复 |
+| 什么都不记录 | 不知道改了什么 | 每次调用都带参数留痕 |
+| Agent 无人值守运行 | 影响范围不可控 | 审批门禁 + 拒绝规则 |
+
+## 接下来
+
+单个会话稳定之后，同一套工具面可以延伸到后台模式——这也是大多数工作室在渲染农场上批量生成变体的方式。到那一步，真正值得讨论的问题不再是"Agent 能不能驱动 Blender"，而是"它被允许碰我们流水线的哪一部分"。这是一个策略问题，不是建模问题。
+
+完整的工具清单见 [MCP for Blender 集成页](/zh/mcp-for-blender)；如果你更想先装上再慢慢看，可以从 [快速上手](/zh/docs#quickstart) 开始。

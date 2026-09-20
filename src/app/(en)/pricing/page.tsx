@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   title: "Pricing — Free Community plan, Studio seats and Enterprise",
   description:
     "The free Community edition covers every public MCP integration with a read-only default policy. Studio adds multi-instance control, audit retention and shared policies; Enterprise adds SSO, self-hosting and custom bridges.",
-  alternates: { canonical: "/pricing" },
+  alternates: { canonical: "/pricing", languages: { en: "/pricing", "zh-CN": "/zh/pricing" } },
   keywords: ["MCP pricing", "MCP server pricing", "studio MCP license", "enterprise MCP deployment"],
 };
 
