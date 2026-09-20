@@ -1,0 +1,68 @@
+---
+title: "The hidden cost of \"just let the model write a Python script\""
+description: "Generated scripts are cheap to produce and expensive to own. Here is what actually breaks when AI-to-DCC integrations skip the tool contract."
+date: "2026-07-28"
+readingTime: "7 min read"
+category: "Engineering"
+keywords:
+  - "AI agent for 3D software"
+  - "production MCP for 3D software"
+  - "DCC automation"
+---
+
+There is a specific moment in every AI-to-DCC project where the demo works and the team assumes the hard part is over. Someone asks the model for a script, it runs, a shape appears on screen, and everyone is impressed.
+
+The hard part has not started yet.
+
+## Scripts optimize for the happy path
+
+A generated script is a single shot at a complex state machine. It assumes the active object is the right one, that the collection exists, that the units match, and that no operator context will be needed. When an assumption is wrong, the failure is not graceful — it is a traceback and a half-mutated scene.
+
+Tool calls are different in kind. A tool has a schema, so the agent knows what a valid request looks like before it makes one. A rejected call is a cheap, recoverable event. A rejected script is a crime scene.
+
+## Nobody can review a script that does not exist yet
+
+Review is the quiet cost. A 200-line generated script has no stable interface: change one line and the whole thing is new code requiring a fresh review. A tool surface is stable, so a reviewer checks the policy once and then trusts the contract.
+
+This is why studios approve DCCMCP deployments faster than they approve "we gave the model Python access." It is not about the model. It is about what a reviewer can actually inspect.
+
+## The blast radius problem
+
+Consider what an unattended agent can reach with raw script execution:
+
+- Every file the Blender process can open
+- Every linked library in the project
+- Network access from the host
+- The undo stack of an unsaved scene
+
+Exposing a curated tool list narrows that surface to what you decided to expose. Deny rules remove the rest. There is no equivalent with a scripting tab.
+
+> The question is never "is the model smart enough". It is "what is the smallest set of capabilities that finishes this job, and who approved them".
+
+## Cost, in the way finance sees it
+
+Generated scripts have a low unit cost and a high incident cost. Every production incident has a tail: the corrupted file, the re-render, the client conversation, the post-mortem that concludes "we should add guardrails."
+
+Typed tools move that spend forward. You pay once, in policy design, instead of repeatedly, in recovery.
+
+| Cost center | Generated scripts | Typed tool surface |
+| --- | --- | --- |
+| First working demo | Hours | Hours |
+| Debugging in production | Continuous | Rare |
+| Review effort | Per script | Once per policy |
+| Incident recovery | Unbounded | Bounded by rollback |
+| Audit readiness | Effectively zero | By default |
+
+## What to ask a vendor instead
+
+When you evaluate an integration, skip the demo. Ask these instead:
+
+1. Which operations are read, write or execute, and can I see the full list?
+2. What happens when the agent targets something that does not exist?
+3. Can I make a destructive call reversible, and how long does rollback take?
+4. Where are the logs stored, how long do they live, and can I export them?
+5. What is denied by default?
+
+A vendor who can answer those five questions in a single page is not selling you a demo. They are selling you something you can put in front of your TD.
+
+If you want to see how those answers look in practice, the [MCP for Blender](/mcp-for-blender) and [MCP for QGIS](/mcp-for-qgis) pages list the tool surface, risk class per tool and the default policy for each.

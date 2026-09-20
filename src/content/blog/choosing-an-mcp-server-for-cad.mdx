@@ -1,0 +1,97 @@
+---
+title: "How to evaluate an MCP server for CAD and GIS work"
+description: "A buyer's checklist for teams connecting AI agents to Rhino, FreeCAD, QGIS or other engineering software — what separates a demo from a deployment."
+date: "2026-07-09"
+readingTime: "8 min read"
+category: "Buyer's guides"
+keywords:
+  - "best MCP server for CAD"
+  - "MCP for Rhino"
+  - "MCP for FreeCAD"
+  - "MCP for QGIS"
+  - "AI agent for GIS software"
+---
+
+Engineering software punishes imprecision. A CAD model with a broken constraint tree is worse than no model at all, and a geospatial analysis with a CRS mistake can be wrong by a factor of thousands while still rendering beautifully.
+
+That is why the evaluation criteria for CAD and GIS integrations differ from generic developer tooling. Here is the checklist we would use if we were buying.
+
+## 1. Does it understand model semantics, not just the API?
+
+Every serious CAD and GIS package has a scripting API. That is not the interesting part. The interesting part is whether the integration understands the concepts the API is manipulating.
+
+For Rhino that means units, tolerances, layer structure, and block instances rather than exploded geometry. For FreeCAD it means the feature tree, constraints and parent-child references. For QGIS it means coordinate reference systems, layer provenance and layout composition.
+
+Ask: when the agent edits a model, does it produce something a human can keep working on?
+
+## 2. Can you see the tool surface before you buy?
+
+A production integration publishes its tools. You should be able to read a list, understand what each one does, and know which are read-only.
+
+Anything that says "the agent can do anything the software can do" is describing an unbounded blast radius, not a feature.
+
+## 3. What happens on invalid input?
+
+This is the sharpest dividing line between demo-grade and production-grade.
+
+- **Demo grade:** the call raises an exception and the session dies.
+- **Production grade:** the call returns a structured error naming the invalid argument and the constraint that rejected it, and the session continues.
+
+The second behavior is what makes an agent loop productive. The agent can read the error and correct itself, exactly like a developer with a compiler.
+
+## 4. Is the work reversible?
+
+Ask these three questions:
+
+1. Does a destructive operation create a checkpoint automatically?
+2. Can I restore a single object rather than the whole file?
+3. Does rollback interact correctly with the host application's own undo stack?
+
+An integration that cannot answer the second question is only useful in a sandbox.
+
+## 5. Where does the data go?
+
+For most studios the correct answer is "nowhere." The integration runs locally, the agent talks to a local server, and no model data crosses the network.
+
+If a vendor offers cloud processing, they should be able to state precisely what is transmitted, where it is stored, for how long, and whether it can be disabled entirely. In AEC and manufacturing this is frequently a contract requirement, not a preference.
+
+## 6. Can your IT team deploy it?
+
+The questions that decide a rollout are rarely about geometry:
+
+- Does it support SSO and role-based access?
+- Can it run air-gapped?
+- Are builds signed, and is an SBOM available?
+- Do audit logs export to the SIEM you already run?
+
+If the answer to these is a shrug, expect a long procurement conversation.
+
+## 7. Does it survive the second month?
+
+The real test of an integration is what happens after the initial excitement. Look for teams who can answer:
+
+- Did anything break when the host application updated?
+- When an agent produced a wrong result, how long did it take to find out why?
+- Could you tell which operations ran last Tuesday?
+
+Point 3 requires audit logs. Point 2 requires provenance. Point 1 requires the vendor to treat host version support as a product surface rather than an afterthought.
+
+## A condensed scoring sheet
+
+| Criterion | Weight | What a strong answer looks like |
+| --- | --- | --- |
+| Model semantics | High | Units, constraints and structure preserved |
+| Published tool surface | High | Every tool listed with risk class |
+| Error handling | High | Structured, recoverable, specific |
+| Reversibility | High | Automatic checkpoints, scoped restore |
+| Data locality | Medium | Local by default, nothing transmitted |
+| Enterprise readiness | Medium | SSO, air-gap, signed builds, SBOM |
+| Durability | Medium | Dated host-version support, visible changelog |
+
+## The short version
+
+If you only ask one question, ask this: **can I describe, in advance, exactly what your agent is allowed to do to my files?**
+
+A vendor with a real answer will send you a policy document and a tool list. That is the difference between a demo that impresses a room and a system your TD will actually approve.
+
+Compare the tool surfaces for [Rhino](/mcp-for-rhino), [FreeCAD](/mcp-for-freecad) and [QGIS](/mcp-for-qgis), or read the [security overview](/legal/security) for how policies and audit logs work.
