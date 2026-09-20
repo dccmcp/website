@@ -106,6 +106,24 @@ A post without a Chinese twin simply has no `/zh/blog/<slug>` page.
 **Legal documents** — `src/lib/legal.ts` holds sectioned content for each document; the route is
 static via `generateStaticParams`.
 
+### Plan entitlements
+
+`src/lib/pricing.ts` is the single source of truth for what each plan includes; the pricing pages
+(EN and ZH), the home-page preview and the JSON-LD all read from it. When a capability moves
+between plans, change it there first, then fix the prose in the places that assert it:
+
+- `/download` lists what the **free** edition contains, in both locales.
+- FAQ answers are the sneaky ones. "Will the Community edition be free?" and "Can an agent break my
+  production scene?" both used to promise checkpointing to everyone — the download and integration
+  answers carry the current wording.
+- The integrations hub describes always-on features; anything gated does not belong in that copy.
+- The hero's promise row is deliberately limited to capabilities **every** plan has. Paid
+  differentiators belong on the pricing page, where the gate is stated next to the price.
+
+**Current gate:** checkpoints and rollback are **Studio and Enterprise only** (Community shows a
+dash in the comparison table). Community's protection is the read-only default plus the approval
+gate, and the copy says exactly that rather than implying reversible writes.
+
 ## SEO
 
 - Per-page `title`, `description`, canonical URL, Open Graph and Twitter card metadata.
@@ -259,17 +277,30 @@ settings. No other build configuration is required.
 
 ### Outstanding production setup
 
-Three things live outside this repository and are **not done yet**:
+Current state of the moving parts that live outside this repository:
 
-1. **`dccmcp.com` has no MX records.** Every "email support@dccmcp.com" call to action on the site
-   — footer, pricing, download, legal, and the contact form's fallback — currently bounces. Fix by
-   turning on Cloudflare Email Routing (free) on the `dccmcp.com` zone and forwarding
-   `support@dccmcp.com` to a real mailbox, or by pointing MX at a mailbox provider. Note that
-   outbound mail from `support@dccmcp.com` works regardless — ZeptoMail does not need inbound MX.
-2. **Turnstile keys are unset.** The captcha layer is written and tested but stays inactive
-   until `NEXT_PUBLIC_TURNSTILE_SITE_KEY` and `TURNSTILE_SECRET_KEY` are set, so the production
-   form currently has no bot protection beyond the honeypot.
-3. **`CONTACT_TO_EMAIL` is unset.** ZeptoMail sends fine, but the form needs a destination inbox
-   that can actually receive mail. Do not point it at `support@dccmcp.com` until item 1 is fixed:
-   the transport would accept the message, the form would report success, and the enquiry would
-   silently bounce — exactly the failure mode this route is written to avoid.
+| Item | State |
+| --- | --- |
+| Turnstile | ✅ Widget `DCCMCP` (managed, `dccmcp.com`); site key + secret set on Vercel |
+| `CONTACT_TO_EMAIL` | ✅ `leon@meetaps.com` — the form delivers through ZeptoMail |
+| SPF / DKIM / DMARC | ✅ SPF on the root and on `bounce-zem`, DKIM selector `2045229`, DMARC `p=none` |
+| **Inbound MX** | ⏸ **Deferred by decision — apply at launch** |
+
+**Inbound MX (deferred until launch).** `dccmcp.com` has no MX records, so
+`support@dccmcp.com` cannot receive mail. Every "email support@dccmcp.com" call to action — footer,
+pricing, download, legal, and the contact form's own fallback — bounces today. Outbound mail is
+unaffected: ZeptoMail sends from that address without needing inbound routing.
+
+When the product actually launches, apply the fix in one go:
+
+1. Cloudflare dashboard → the `dccmcp.com` zone → **Email Routing** → enable.
+2. Add a destination address (`leon@meetaps.com`) and click the verification link Cloudflare emails.
+3. Add a rule forwarding `support@dccmcp.com` → that destination.
+
+That writes the MX records (and an SPF TXT) for the zone, which turns every `mailto:` link on the
+site from a dead end into a working contact path. Until then the enquiry form is the only inbound
+channel, which is why it is wired to a real mailbox.
+
+A domain that sends mail without MX is a mild negative signal in some spam filters, so enabling
+this at launch helps deliverability as well.
+

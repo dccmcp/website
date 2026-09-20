@@ -92,9 +92,12 @@ export function Hero() {
                   <ShieldCheck className="h-4 w-4 text-mint" weight="duotone" />
                   Read-only by default
                 </li>
+                {/* Keep this row to capabilities every plan has. Checkpointed
+                    writes and rollback are a Studio feature, so they belong on
+                    the pricing page, not here. */}
                 <li className="inline-flex items-center gap-1.5">
                   <Cube className="h-4 w-4 text-mint" weight="duotone" />
-                  Checkpointed write tools
+                  Typed tool contract
                 </li>
                 <li className="inline-flex items-center gap-1.5">
                   <span className="font-mono text-[11px] text-mint">stdio</span>
