@@ -137,12 +137,32 @@ There is a free Community edition, so nothing gates the product behind a sales c
 
 `POST /api/contact` validates the payload server-side (including a honeypot) and then, in order:
 
-1. `RESEND_API_KEY` + `CONTACT_TO_EMAIL` → emails the enquiry (optional `CONTACT_FROM_EMAIL`).
-2. `CONTACT_WEBHOOK_URL` → POSTs the payload as JSON.
-3. Neither configured → `503`, so the form falls back to a `mailto:` link to `support@dccmcp.com`.
+1. `ZEPTOMAIL_API_KEY` + `CONTACT_TO_EMAIL` → emails the enquiry through ZeptoMail.
+2. `RESEND_API_KEY` + `CONTACT_TO_EMAIL` → emails the enquiry through Resend.
+3. `CONTACT_WEBHOOK_URL` → POSTs the payload as JSON.
+4. Nothing configured → `503`, so the form falls back to a `mailto:` link.
 
-It never reports a success it did not achieve. **Production currently has none of these variables
-set on Vercel**, so the form is in fallback mode until one is added — see the deployment checklist.
+It never reports a success it did not achieve.
+
+### ZeptoMail
+
+Enquiries go out over ZeptoMail's HTTP API (`https://api.zeptomail.com/v1.1/email`,
+`Authorization: Zoho-enczapikey <token>`), not SMTP — no dependency, no long-lived socket, which
+suits a serverless function. The token is the Mail Agent's **Send Mail Token**, the same string
+used as the SMTP password with the username `emailapikey`; SMTP on `smtp.zeptomail.com` (465 SSL /
+587 STARTTLS) also authenticates with it if we ever need that path.
+
+| Variable | Value |
+| --- | --- |
+| `ZEPTOMAIL_API_KEY` | Send Mail Token |
+| `CONTACT_TO_EMAIL` | Inbox that receives enquiries — **must be able to receive mail** |
+| `CONTACT_FROM_EMAIL` | `DCCMCP <support@dccmcp.com>` (domain verified in ZeptoMail) |
+| `ZEPTOMAIL_API_URL` | Optional; regional hosts (`.in`, `.eu`) |
+
+Two quirks worth remembering: `to` entries nest their address under `email_address`, while
+`reply_to` entries take `address` at the top level; and the sending domain does **not** need
+inbound MX, so ZeptoMail can send from `support@dccmcp.com` even though that address cannot
+receive replies.
 
 ## Brand and legal guardrails
 
@@ -199,8 +219,9 @@ Two things are configured outside this repository and are **not done yet**:
 1. **`dccmcp.com` has no MX records.** Every "email support@dccmcp.com" call to action on the site
    — footer, pricing, download, legal, and the contact form's fallback — currently bounces. Fix by
    turning on Cloudflare Email Routing (free) on the `dccmcp.com` zone and forwarding
-   `support@dccmcp.com` to a real mailbox, or by pointing MX at a mailbox provider. Without MX,
-   fixing item 2 still leaves the site's primary contact path broken.
-2. **No environment variables on the Vercel project.** Until `RESEND_API_KEY` + `CONTACT_TO_EMAIL`
-   (or `CONTACT_WEBHOOK_URL`) exist, `/api/contact` returns `503`. `vercel env ls production`
-   currently reports none.
+   `support@dccmcp.com` to a real mailbox, or by pointing MX at a mailbox provider. Note that
+   outbound mail from `support@dccmcp.com` works regardless — ZeptoMail does not need inbound MX.
+2. **`CONTACT_TO_EMAIL` is unset.** ZeptoMail sends fine, but the form needs a destination inbox
+   that can actually receive mail. Do not point it at `support@dccmcp.com` until item 1 is fixed:
+   the transport would accept the message, the form would report success, and the enquiry would
+   silently bounce — exactly the failure mode this route is written to avoid.

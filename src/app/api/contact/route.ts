@@ -15,9 +15,10 @@ const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
 /**
  * Transport resolution order:
- *   1. RESEND_API_KEY + CONTACT_TO_EMAIL  → send the enquiry as an email
- *   2. CONTACT_WEBHOOK_URL                → POST the payload as JSON
- *   3. neither                            → 503 so the form can fall back to mailto
+ *   1. ZEPTOMAIL_API_KEY + CONTACT_TO_EMAIL  → send the enquiry via ZeptoMail
+ *   2. RESEND_API_KEY + CONTACT_TO_EMAIL     → send the enquiry via Resend
+ *   3. CONTACT_WEBHOOK_URL                   → POST the payload as JSON
+ *   4. neither                               → 503 so the form can fall back to mailto
  *
  * We never report a success we did not actually achieve.
  */
@@ -62,26 +63,22 @@ export async function POST(request: Request) {
     message,
   };
 
-  const resendKey = process.env.RESEND_API_KEY;
   const toEmail = process.env.CONTACT_TO_EMAIL;
-  const fromEmail = process.env.CONTACT_FROM_EMAIL ?? "DCCMCP <onboarding@resend.dev>";
+  const subject = `DCCMCP enquiry — ${company || name}`;
+  const text = [
+    `Name:      ${name}`,
+    `Email:     ${email}`,
+    company && `Company:   ${company}`,
+    teamSize && `Team size: ${teamSize}`,
+    software.length && `Software:  ${software.join(", ")}`,
+    `Received:  ${enquiry.receivedAt}`,
+    "",
+    message,
+  ]
+    .filter(Boolean)
+    .join("\n");
 
-  if (resendKey && toEmail) {
-    const subject = `DCCMCP enquiry — ${company || name}`;
-    const text = [
-      `Name:      ${name}`,
-      `Email:     ${email}`,
-      company && `Company:   ${company}`,
-      teamSize && `Team size: ${teamSize}`,
-      software.length && `Software:  ${software.join(", ")}`,
-      `Received:  ${enquiry.receivedAt}`,
-      "",
-      message,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    const html = `<div style="font-family:ui-sans-serif,system-ui,sans-serif;line-height:1.6;color:#111">
+  const html = `<div style="font-family:ui-sans-serif,system-ui,sans-serif;line-height:1.6;color:#111">
   <h2 style="margin:0 0 16px">DCCMCP enquiry</h2>
   <table cellpadding="0" cellspacing="0" style="border-collapse:collapse">
     <tr><td style="padding:2px 12px 2px 0;color:#666">Name</td><td>${escapeHtml(name)}</td></tr>
@@ -95,6 +92,58 @@ export async function POST(request: Request) {
   <p style="white-space:pre-wrap;margin:0">${escapeHtml(message)}</p>
 </div>`;
 
+  const zeptoKey = process.env.ZEPTOMAIL_API_KEY;
+  const fromEmail =
+    process.env.CONTACT_FROM_EMAIL ?? `${site.name} <support@${site.domain}>`;
+
+  if (zeptoKey && toEmail) {
+    // ZeptoMail wants the bare address and an optional display name in separate
+    // fields, so a `Name <addr>` string has to be split apart here.
+    const from = parseAddress(fromEmail);
+
+    try {
+      const response = await fetch(zeptoEndpoint(), {
+        method: "POST",
+        headers: {
+          accept: "application/json",
+          "content-type": "application/json",
+          authorization: `Zoho-enczapikey ${zeptoKey}`,
+        },
+        body: JSON.stringify({
+          from,
+          to: [{ email_address: { address: toEmail } }],
+          // ZeptoMail is inconsistent here: `to` nests under email_address,
+          // `reply_to` takes the address at the top level.
+          reply_to: [{ address: email, name }],
+          subject,
+          textbody: text,
+          htmlbody: html,
+        }),
+        cache: "no-store",
+      });
+
+      if (!response.ok) {
+        const detail = await response.text();
+        console.error("ZeptoMail rejected the enquiry:", response.status, detail);
+        throw new Error(`ZeptoMail responded ${response.status}`);
+      }
+
+      return NextResponse.json({ ok: true, delivered: true, via: "zeptomail" });
+    } catch (error) {
+      console.error("Contact form: ZeptoMail transport failed", error);
+      return NextResponse.json(
+        {
+          error: "transport-failed",
+          message: `We could not deliver that just now. Email ${site.email} and we will pick it up.`,
+        },
+        { status: 502 },
+      );
+    }
+  }
+
+  const resendKey = process.env.RESEND_API_KEY;
+
+  if (resendKey && toEmail) {
     try {
       const response = await fetch("https://api.resend.com/emails", {
         method: "POST",
@@ -164,6 +213,21 @@ export async function POST(request: Request) {
       { status: 502 },
     );
   }
+}
+
+/** ZeptoMail runs regional API hosts; the default is the global one. */
+function zeptoEndpoint() {
+  return process.env.ZEPTOMAIL_API_URL ?? "https://api.zeptomail.com/v1.1/email";
+}
+
+/** Split `Display Name <addr@example.com>` into ZeptoMail's address shape. */
+function parseAddress(value: string) {
+  const match = value.match(/^\s*(.*?)\s*<([^>]+)>\s*$/);
+
+  if (!match) return { address: value.trim() };
+
+  const [, name, address] = match;
+  return name ? { address, name } : { address };
 }
 
 function escapeHtml(value: string) {
