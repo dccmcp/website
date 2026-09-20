@@ -41,7 +41,7 @@ const zhPlans = {
     cta: "开始 14 天试用",
     includes: [
       "包含社区版全部内容",
-      "写操作的检查点与回滚",
+      "完整版本历史 —— 对比、标记、恢复任意一次运行",
       "多实例与无界面 / 批量控制",
       "审计日志 90 天留存",
       "团队策略配置与审批门控",
@@ -78,7 +78,8 @@ const zhCompare: Record<string, string> = {
   "Control & safety": "控制与安全",
   "Safety policy profiles": "安全策略配置",
   "Approval gates for write tools": "写操作审批门控",
-  "Checkpoints and rollback": "检查点与回滚",
+  "Undo the last run": "撤销最近一次运行",
+  "Version history and rollback": "版本历史与回滚",
   "Read-only default": "默认只读",
   Governance: "治理",
   "Audit log retention": "审计日志留存",
@@ -123,7 +124,7 @@ const faq = [
   },
   {
     q: "试用集成需要付费方案吗？",
-    a: "不需要。社区版包含全部公开集成，且默认只读。当你需要在共享或生产文件中写入时再升级——尤其是能保证破坏性调用可恢复的检查点与回滚。",
+    a: "不需要。社区版包含全部公开集成、默认只读，并且可以撤销最近一次运行。当团队开始依赖它时再升级：完整版本历史（可对比、可标记、可恢复任意一次运行），外加共享策略、审批工作流与更长的审计留存。",
   },
   {
     q: "我的数据会离开本机吗？",

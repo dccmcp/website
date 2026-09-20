@@ -120,9 +120,11 @@ between plans, change it there first, then fix the prose in the places that asse
 - The hero's promise row is deliberately limited to capabilities **every** plan has. Paid
   differentiators belong on the pricing page, where the gate is stated next to the price.
 
-**Current gate:** checkpoints and rollback are **Studio and Enterprise only** (Community shows a
-dash in the comparison table). Community's protection is the read-only default plus the approval
-gate, and the copy says exactly that rather than implying reversible writes.
+**Current gate (revised after the payment research):** Community gets **undo for the last run** —
+the same safety floor the free open-source MCP servers already give people — and **Studio and
+Enterprise** get the full **version history** (compare, mark, restore any run) plus team governance.
+Gating plain undo behind a paid plan would have made the free tier worse than the free alternatives
+without converting anyone, since individuals do not pay for safety; teams pay for governance.
 
 ## SEO
 

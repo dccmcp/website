@@ -147,7 +147,7 @@ export const integrations: Integration[] = [
       },
       {
         q: "Can an agent break my production scene?",
-        a: "Mutating tools run behind a policy layer, and the default profile is read-only. Studio and Enterprise add checkpoints before every destructive operation, so a bad call can be rolled back through the host application's undo stack plus DCCMCP. On the free Community edition the protection is the read-only default and the approval gate — checkpointing and rollback are paid features.",
+        a: "Mutating tools run behind a policy layer, and the default profile is read-only. Every plan can undo the last run, so a bad call is one click back. Studio and Enterprise keep a full version history instead of just the last step: compare any two runs, mark a good one, and restore it later — which matters when a scene is refined over many sessions.",
       },
       {
         q: "Does it work with Blender in background mode?",
