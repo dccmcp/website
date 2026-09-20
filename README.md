@@ -144,6 +144,27 @@ There is a free Community edition, so nothing gates the product behind a sales c
 
 It never reports a success it did not achieve.
 
+### Email template
+
+Every transport renders through `src/lib/enquiry-email.ts`. It returns
+`{ subject, text, html }` from one enquiry, so ZeptoMail and Resend can never drift apart, and
+there is a single place to restyle.
+
+The HTML is deliberately built the way email clients require: nested tables, inline styles on
+every element, a 600px container that collapses on mobile, web-safe font stacks, and a light
+scheme forced with `color-scheme`. No `<style>` block, no flexbox, no grid — Outlook desktop
+renders through Word and Gmail strips more than people expect. Do not move these rules into a
+stylesheet.
+
+The plain-text part is a real alternative, not an afterthought: it spells out the same fields
+with an ASCII rule separator, because some clients and a lot of forwarding paths show only that.
+
+Preview or send it locally without going through the site:
+
+```bash
+node /tmp/render-demos.ts      # writes /tmp/email-*.html for a visual check
+```
+
 ### Bot protection
 
 The form carries a Cloudflare Turnstile widget configured for **Managed** mode with

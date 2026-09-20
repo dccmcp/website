@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { buildEnquiryEmail } from "@/lib/enquiry-email";
 import { site } from "@/lib/site";
 
 type Payload = {
@@ -113,37 +114,10 @@ export async function POST(request: Request) {
   };
 
   const toEmail = process.env.CONTACT_TO_EMAIL;
-  const subject = `DCCMCP enquiry — ${company || name}`;
-  const text = [
-    `Name:      ${name}`,
-    `Email:     ${email}`,
-    company && `Company:   ${company}`,
-    teamSize && `Team size: ${teamSize}`,
-    software.length && `Software:  ${software.join(", ")}`,
-    `Received:  ${enquiry.receivedAt}`,
-    "",
-    message,
-  ]
-    .filter(Boolean)
-    .join("\n");
-
-  const html = `<div style="font-family:ui-sans-serif,system-ui,sans-serif;line-height:1.6;color:#111">
-  <h2 style="margin:0 0 16px">DCCMCP enquiry</h2>
-  <table cellpadding="0" cellspacing="0" style="border-collapse:collapse">
-    <tr><td style="padding:2px 12px 2px 0;color:#666">Name</td><td>${escapeHtml(name)}</td></tr>
-    <tr><td style="padding:2px 12px 2px 0;color:#666">Email</td><td><a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></td></tr>
-    ${company ? `<tr><td style="padding:2px 12px 2px 0;color:#666">Company</td><td>${escapeHtml(company)}</td></tr>` : ""}
-    ${teamSize ? `<tr><td style="padding:2px 12px 2px 0;color:#666">Team size</td><td>${escapeHtml(teamSize)}</td></tr>` : ""}
-    ${software.length ? `<tr><td style="padding:2px 12px 2px 0;color:#666">Software</td><td>${escapeHtml(software.join(", "))}</td></tr>` : ""}
-    <tr><td style="padding:2px 12px 2px 0;color:#666">Received</td><td>${escapeHtml(enquiry.receivedAt)}</td></tr>
-  </table>
-  <h3 style="margin:20px 0 6px">Message</h3>
-  <p style="white-space:pre-wrap;margin:0">${escapeHtml(message)}</p>
-</div>`;
+  const { subject, text, html } = buildEnquiryEmail(enquiry);
+  const fromEmail = process.env.CONTACT_FROM_EMAIL ?? `${site.name} <support@${site.domain}>`;
 
   const zeptoKey = process.env.ZEPTOMAIL_API_KEY;
-  const fromEmail =
-    process.env.CONTACT_FROM_EMAIL ?? `${site.name} <support@${site.domain}>`;
 
   if (zeptoKey && toEmail) {
     // ZeptoMail wants the bare address and an optional display name in separate
@@ -277,13 +251,4 @@ function parseAddress(value: string) {
 
   const [, name, address] = match;
   return name ? { address, name } : { address };
-}
-
-function escapeHtml(value: string) {
-  return value
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#39;");
 }
