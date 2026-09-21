@@ -22,8 +22,8 @@ export function FinalCta() {
 
           <p className="max-w-[58ch] text-[15.5px] leading-relaxed text-muted">
             Install an integration, set a policy, and let your agent inspect, build and validate
-            work in Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD, QGIS or
-            OpenCV. Free to start, local by default.
+            work in Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD or QGIS.
+            Free to start, local by default.
           </p>
 
           <div className="flex flex-wrap items-center justify-center gap-3">

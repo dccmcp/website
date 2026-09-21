@@ -49,7 +49,6 @@ const installMatrix = [
   { software: "Photoshop", command: "uxp install ./dccmcp-photoshop.ccx", server: "npx dccmcp-photoshop serve" },
   { software: "FreeCAD", command: "插件管理器 → DCCMCP Workbench", server: "npx dccmcp-freecad serve" },
   { software: "QGIS", command: "插件 → 管理与安装插件 → DCCMCP", server: "npx dccmcp-qgis serve" },
-  { software: "OpenCV", command: "pip install dccmcp-opencv", server: "dccmcp-opencv serve" },
 ];
 
 const changelog = [
@@ -90,7 +89,6 @@ const supportMatrix = [
   { software: "Photoshop", supported: "2024 · 2025 · 2026", cadence: "厂商发布后 14 天内完成测试" },
   { software: "FreeCAD", supported: "0.21 · 1.0+", cadence: "稳定版发布后 21 天内完成测试" },
   { software: "QGIS", supported: "3.34 LTR · 3.40+", cadence: "LTR 发布后 14 天内完成测试" },
-  { software: "OpenCV", supported: "4.x · 5.x", cadence: "持续跟进" },
 ];
 
 function CodeBlock({ children, label }: { children: string; label?: string }) {

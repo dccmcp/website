@@ -25,7 +25,7 @@ const zhPlans = {
     blurb: "把 Agent 接到一台机器上所需的一切。发布后直接下载——无需账号、无需信用卡、无需电话。",
     cta: "即将发布",
     includes: [
-      "全部公开集成（Blender、Rhino、Maya、QGIS、Houdini、Photoshop 等 10 款）",
+      "全部公开集成（Blender、Rhino、Maya、QGIS、Houdini、Photoshop 等 9 款）",
       "默认只读的安全策略",
       "本地 stdio 传输",
       "社区支持与 Discord",

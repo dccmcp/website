@@ -4,7 +4,7 @@ export const site = {
   url: process.env.NEXT_PUBLIC_SITE_URL ?? "https://dccmcp.com",
   tagline: "MCP Servers for DCC, CAD, GIS & Vision Software",
   description:
-    "Production-grade MCP Servers, plugins and tool bridges that let Claude, Cursor and your own agents control Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD, QGIS and OpenCV — safely, with typed tools, safety policies and audit logs.",
+    "Production-grade MCP Servers, plugins and tool bridges that let Claude, Cursor and your own agents control Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD and QGIS — safely, with typed tools, safety policies and audit logs.",
   email: "support@dccmcp.com",
   github: "https://github.com/dccmcp",
   discord: "https://discord.gg/dccmcp",

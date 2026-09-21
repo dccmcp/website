@@ -16,7 +16,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Enterprise — SSO, self-hosting and private MCP bridges",
   description:
-    "DCCMCP Enterprise adds SSO/SAML, SCIM, self-hosted or air-gapped deployment, unlimited audit retention, SIEM export, signed builds and custom integrations for Blender, Rhino, FreeCAD, QGIS, OpenCV and in-house tools.",
+    "DCCMCP Enterprise adds SSO/SAML, SCIM, self-hosted or air-gapped deployment, unlimited audit retention, SIEM export, signed builds and custom integrations for Blender, Rhino, FreeCAD, QGIS and in-house tools.",
   alternates: { canonical: "/enterprise", languages: { en: "/enterprise", "zh-CN": "/zh/enterprise" } },
   keywords: [
     "enterprise MCP server",

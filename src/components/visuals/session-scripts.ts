@@ -79,20 +79,4 @@ export const sessions: Session[] = [
       { kind: "ok", text: "24 atlas sheets exported", detail: "provenance attached" },
     ],
   },
-  {
-    slug: "opencv",
-    software: "OpenCV",
-    window: "line-inspection-v4",
-    href: "/mcp-for-opencv",
-    lines: [
-      { kind: "prompt", text: "Calibrate the rig, then run the defect pipeline over today's frames." },
-      { kind: "call", tool: "calibration.calibrate", args: '{ board: "charuco", images: 32 }' },
-      { kind: "result", text: "RMS reprojection error 0.28 px", detail: "intrinsics stored" },
-      { kind: "call", tool: "pipeline.compose", args: '{ ops: 9, version: "v4" }' },
-      { kind: "result", text: "pipeline versioned", detail: "params hashed" },
-      { kind: "call", tool: "pipeline.run", args: '{ dataset: "frames/today" }' },
-      { kind: "result", text: "4,000 frames · 6 failed", detail: "failures listed in manifest" },
-      { kind: "ok", text: "Run manifest + goldens stored", detail: "regression baseline updated" },
-    ],
-  },
 ];

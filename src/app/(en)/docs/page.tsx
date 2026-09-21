@@ -46,7 +46,6 @@ const installMatrix = [
   { software: "Photoshop", command: "uxp install ./dccmcp-photoshop.ccx", server: "npx dccmcp-photoshop serve" },
   { software: "FreeCAD", command: "Addon Manager → DCCMCP Workbench", server: "npx dccmcp-freecad serve" },
   { software: "QGIS", command: "Plugins → Manage and Install → DCCMCP", server: "npx dccmcp-qgis serve" },
-  { software: "OpenCV", command: "pip install dccmcp-opencv", server: "dccmcp-opencv serve" },
 ];
 
 const changelog = [
@@ -87,7 +86,6 @@ const supportMatrix = [
   { software: "Photoshop", supported: "2024 · 2025 · 2026", cadence: "Tested within 14 days of a vendor release" },
   { software: "FreeCAD", supported: "0.21 · 1.0+", cadence: "Tested within 21 days of a stable release" },
   { software: "QGIS", supported: "3.34 LTR · 3.40+", cadence: "Tested within 14 days of a LTR release" },
-  { software: "OpenCV", supported: "4.x · 5.x", cadence: "Tracked continuously" },
 ];
 
 function CodeBlock({ children, label }: { children: string; label?: string }) {

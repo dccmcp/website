@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: `%s | ${site.name}`,
   },
   description:
-    "DCCMCP 提供生产级 MCP Server 与插件，让 AI Agent 直接操作 Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD、QGIS 与 OpenCV —— 带类型化工具、安全策略、检查点与审计日志。",
+    "DCCMCP 提供生产级 MCP Server 与插件，让 AI Agent 直接操作 Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD 与 QGIS —— 带类型化工具、安全策略、检查点与审计日志。",
   alternates: { canonical: "/zh" },
   openGraph: { locale: "zh_CN", url: "/zh" },
 };

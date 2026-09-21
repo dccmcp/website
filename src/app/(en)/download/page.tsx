@@ -12,7 +12,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Coming soon — DCCMCP packages are not published yet",
   description:
-    "DCCMCP integrations for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD, QGIS and OpenCV are in private testing. Packages publish soon — email support@dccmcp.com to be notified.",
+    "DCCMCP integrations for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD and QGIS are in private testing. Packages publish soon — email support@dccmcp.com to be notified.",
   alternates: { canonical: "/download", languages: { en: "/download", "zh-CN": "/zh/download" } },
   keywords: [
     "DCCMCP release date",
@@ -42,7 +42,7 @@ const included = [
 const faq = [
   {
     q: "When will the packages be published?",
-    a: "They are in private testing now. We publish when the safety and rollback behaviour holds up across all 10 integrations, and we email everyone on the notification list the day it happens. Email support@dccmcp.com with the software you use and we will tell you where you are in the queue.",
+    a: "They are in private testing now. We publish when the safety and rollback behaviour holds up across all 9 integrations, and we email everyone on the notification list the day it happens. Email support@dccmcp.com with the software you use and we will tell you where you are in the queue.",
   },
   {
     q: "Can I download or install anything today?",
@@ -81,7 +81,7 @@ export default function DownloadPage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="max-w-[58ch] text-[16px] leading-relaxed text-muted sm:text-[17px]">
-                  All 10 integrations are in private testing. There is nothing to download today —
+                  All 9 integrations are in private testing. There is nothing to download today —
                   no package on npm or PyPI, and no download link on this site. When they publish,
                   this page becomes the install guide and everyone on the notification list hears
                   first.

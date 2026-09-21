@@ -34,7 +34,6 @@ export const metadata: Metadata = {
     "MCP for Photoshop",
     "MCP for FreeCAD",
     "MCP for QGIS",
-    "MCP for OpenCV",
     "MCP server for 3D software",
     "MCP server for CAD",
     "AI agent for CAD",
@@ -98,7 +97,6 @@ const organizationSchema = {
     "Rhino and Grasshopper automation",
     "FreeCAD parametric CAD",
     "QGIS geoprocessing",
-    "OpenCV computer vision",
   ],
 };
 

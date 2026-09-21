@@ -15,7 +15,7 @@ export const homeFaq: FaqItem[] = [
   },
   {
     q: "Which host application versions are supported?",
-    a: "Blender 4.2 LTS and newer, Maya 2024+, Houdini 20.5+, 3ds Max 2024+, Rhino 7 and 8, ZBrush 2024+, Photoshop 2024+, FreeCAD 0.21 and 1.0+, QGIS 3.34 LTR and newer, and OpenCV 4.x/5.x. Each integration page lists the exact support matrix, and legacy versions are available on the enterprise track.",
+    a: "Blender 4.2 LTS and newer, Maya 2024+, Houdini 20.5+, 3ds Max 2024+, Rhino 7 and 8, ZBrush 2024+, Photoshop 2024+, FreeCAD 0.21 and 1.0+, and QGIS 3.34 LTR and newer. Each integration page lists the exact support matrix, and legacy versions are available on the enterprise track.",
   },
   {
     q: "Can I build an integration for software you do not support yet, like Revit or Civil 3D?",

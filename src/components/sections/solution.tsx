@@ -8,7 +8,7 @@ const steps = [
     icon: DownloadSimple,
     step: "01",
     title: "Install the MCP server",
-    body: "Add the integration for your host application — Blender addon, Rhino Yak package, FreeCAD workbench, QGIS plugin or a Python package for OpenCV.",
+    body: "Add the integration for your host application — Blender addon, Rhino Yak package, FreeCAD workbench or QGIS plugin.",
     code: "npx dccmcp-blender@latest serve",
   },
   {
@@ -51,8 +51,7 @@ export function Solution() {
             <strong className="font-medium text-fg">MCP for ZBrush</strong>,{" "}
             <strong className="font-medium text-fg">MCP for Photoshop</strong>,{" "}
             <strong className="font-medium text-fg">MCP for FreeCAD</strong>,{" "}
-            <strong className="font-medium text-fg">MCP for QGIS</strong> and{" "}
-            <strong className="font-medium text-fg">MCP for OpenCV</strong>. Each integration
+            <strong className="font-medium text-fg">MCP for QGIS</strong>. Each integration
             includes a local MCP Server, a software plugin or addon, typed tools, safety policies
             and audit logs — so agents can inspect, create, modify and validate work inside the real
             application without breaking your pipeline.

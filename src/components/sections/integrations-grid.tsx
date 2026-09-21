@@ -22,7 +22,7 @@ export function IntegrationsGrid() {
         description={
           <>
             Each integration is a local MCP server plus a native plugin for Blender, Maya, Houdini,
-            3ds Max, Rhino, ZBrush, Photoshop, FreeCAD, QGIS or OpenCV. Same tool contract, same
+            3ds Max, Rhino, ZBrush, Photoshop, FreeCAD or QGIS. Same tool contract, same
             policy engine, same audit format — whichever application your pipeline depends on.
           </>
         }
@@ -55,7 +55,7 @@ export function IntegrationsGrid() {
                 {integrations.length} integrations · {toolCount}+ typed tools
               </h3>
               <p className="max-w-[68ch] text-[13.5px] leading-relaxed text-muted">
-                MCP for 3ds Max, MCP for ZBrush and MCP for OpenCV are documented on their own pages,
+                MCP for 3ds Max and MCP for ZBrush are documented on their own pages,
                 along with the full tool list and support matrix for every integration. If your
                 software is not listed, we build private bridges on the enterprise track — Revit,
                 Civil 3D, KiCad, Ansys, Maya-based in-house tooling and more.

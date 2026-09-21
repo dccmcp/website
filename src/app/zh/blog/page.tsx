@@ -10,7 +10,7 @@ import { site } from "@/lib/site";
 export const metadata: Metadata = {
   title: "博客 —— MCP 教程、集成指南与工程笔记",
   description:
-    "把 AI Agent 接进 Blender、Rhino、FreeCAD、QGIS 与 OpenCV 的实操指南：安全策略、工具设计、审计日志，以及生产环境里真正会出问题的地方。",
+    "把 AI Agent 接进 Blender、Rhino、FreeCAD 与 QGIS 的实操指南：安全策略、工具设计、审计日志，以及生产环境里真正会出问题的地方。",
   alternates: {
     canonical: "/zh/blog",
     languages: { en: "/blog", "zh-CN": "/zh/blog" },

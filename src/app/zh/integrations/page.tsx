@@ -10,7 +10,7 @@ import { integrationsByCategory, integrations, toolCount } from "@/lib/integrati
 export const metadata: Metadata = {
   title: "全部集成 —— Blender、Maya、Houdini、Rhino、Photoshop 的 MCP Server",
   description:
-    "DCCMCP 全部集成一览：Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD、QGIS 与 OpenCV 的 MCP Server，以及针对自研软件的私有桥接。",
+    "DCCMCP 全部集成一览：Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD 与 QGIS 的 MCP Server，以及针对自研软件的私有桥接。",
   alternates: { canonical: "/zh/integrations", languages: { en: "/integrations", "zh-CN": "/zh/integrations" } },
   keywords: ["MCP for Blender", "MCP for Maya", "MCP for Houdini", "国产 AI Agent MCP", "MCP 服务器 3D 软件"],
 };

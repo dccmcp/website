@@ -85,7 +85,6 @@ const copy = {
       { value: "Rhino / Grasshopper", label: "Rhino / Grasshopper" },
       { value: "FreeCAD", label: "FreeCAD" },
       { value: "QGIS", label: "QGIS" },
-      { value: "OpenCV", label: "OpenCV" },
       { value: "Something else / in-house", label: "Something else / in-house" },
     ],
     teamSizes: [
@@ -128,7 +127,6 @@ const copy = {
       { value: "Rhino / Grasshopper", label: "Rhino / Grasshopper" },
       { value: "FreeCAD", label: "FreeCAD" },
       { value: "QGIS", label: "QGIS" },
-      { value: "OpenCV", label: "OpenCV" },
       { value: "Something else / in-house", label: "其他软件 / 自研工具" },
     ],
     teamSizes: [

@@ -5,7 +5,7 @@ export const alt = `${site.name} — ${site.tagline}`;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-const chips = ["MCP for Blender", "MCP for Rhino", "MCP for FreeCAD", "MCP for QGIS", "MCP for OpenCV"];
+const chips = ["MCP for Blender", "MCP for Rhino", "MCP for FreeCAD", "MCP for QGIS"];
 
 export default function OpengraphImage() {
   return new ImageResponse(
@@ -70,7 +70,7 @@ export default function OpengraphImage() {
               maxWidth: 960,
             }}
           >
-            Connect AI agents to Blender, Rhino, FreeCAD, QGIS &amp; OpenCV
+            Connect AI agents to Blender, Rhino, FreeCAD &amp; QGIS
           </span>
           <span style={{ color: "#a1a1aa", fontSize: 25, maxWidth: 920, lineHeight: 1.4 }}>
             Typed tools · safety policies · checkpoints · audit logs. Local by default.

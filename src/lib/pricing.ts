@@ -20,7 +20,7 @@ export const plans: Plan[] = [
     bestFor: "Solo artists, students and evaluation",
     cta: { label: "Coming soon", href: "/download" },
     includes: [
-      "All public integrations (Blender, Rhino, FreeCAD, QGIS, OpenCV)",
+      "All public integrations (Blender, Rhino, FreeCAD, QGIS)",
       "Read-only-by-default safety policy",
       "Undo for the last run",
       "Local stdio transport",

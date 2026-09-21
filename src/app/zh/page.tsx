@@ -25,7 +25,7 @@ import { agents } from "@/lib/agents";
 export const metadata: Metadata = {
   title: "MCP for Blender、Maya、Houdini 与工程软件",
   description:
-    "DCCMCP 提供生产级 MCP Server 与插件，让 Claude Code、Codex、Cursor、豆包等 AI Agent 直接操作 Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD、QGIS 与 OpenCV。类型化工具、安全策略、检查点与审计日志，默认只读、本地运行。",
+    "DCCMCP 提供生产级 MCP Server 与插件，让 Claude Code、Codex、Cursor、豆包等 AI Agent 直接操作 Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD 与 QGIS。类型化工具、安全策略、检查点与审计日志，默认只读、本地运行。",
   alternates: { canonical: "/zh", languages: { en: "/", "zh-CN": "/zh" } },
   keywords: [
     "MCP for Blender",
@@ -63,7 +63,7 @@ const steps = [
     icon: DownloadSimple,
     step: "01",
     title: "安装 MCP Server",
-    body: "为你的宿主软件装对应集成：Blender 插件、Maya 模块、Houdini Package、FreeCAD 工作台、QGIS 插件，或 OpenCV 的 Python 包。",
+    body: "为你的宿主软件装对应集成：Blender 插件、Maya 模块、Houdini Package、FreeCAD 工作台、QGIS 插件。",
   },
   {
     icon: Plugs,
@@ -220,7 +220,7 @@ export default function ChineseHomePage() {
         <SectionHeading
           eyebrow="方案"
           title="在 Agent 与软件之间建立标准契约"
-          description="我们提供标准化的 MCP for Blender、MCP for Maya、MCP for Houdini、MCP for 3ds Max、MCP for Rhino、MCP for ZBrush、MCP for Photoshop、MCP for FreeCAD、MCP for QGIS 与 MCP for OpenCV。每个集成包含本地 MCP Server、软件插件、类型化工具、安全策略与审计日志——让 Agent 在真实应用里读取、创建、修改与校验，而不破坏你的流水线。"
+          description="我们提供标准化的 MCP for Blender、MCP for Maya、MCP for Houdini、MCP for 3ds Max、MCP for Rhino、MCP for ZBrush、MCP for Photoshop、MCP for FreeCAD、MCP for QGIS。每个集成包含本地 MCP Server、软件插件、类型化工具、安全策略与审计日志——让 Agent 在真实应用里读取、创建、修改与校验，而不破坏你的流水线。"
         />
         <StaggerGroup className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {steps.map((item) => (
@@ -271,7 +271,7 @@ export default function ChineseHomePage() {
                   {integrations.length} 个集成 · {toolCount}+ 个类型化工具
                 </h3>
                 <p className="max-w-[68ch] text-[13.5px] leading-relaxed text-muted">
-                  MCP for 3ds Max、MCP for ZBrush 与 MCP for OpenCV 也有各自的独立页面，含完整工具清单与版本支持矩阵。如果没有你要的软件，我们在企业版提供定制私有集成。
+                  MCP for 3ds Max 与 MCP for ZBrush 也有各自的独立页面，含完整工具清单与版本支持矩阵。如果没有你要的软件，我们在企业版提供定制私有集成。
                 </p>
               </div>
             </div>
@@ -325,7 +325,7 @@ export default function ChineseHomePage() {
               把 Agent 放进真实软件，同时守住你的流水线
             </h2>
             <p className="max-w-[58ch] text-[15.5px] leading-relaxed text-muted">
-              10 个集成正在内测，目前还没有可下载的安装包。留下你的软件清单，公测时我们会第一时间通知你。
+              9 个集成正在内测，目前还没有可下载的安装包。留下你的软件清单，公测时我们会第一时间通知你。
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <ButtonLink href="/zh/download" size="lg">
