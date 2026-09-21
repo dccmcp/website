@@ -352,3 +352,29 @@ channel, which is why it is wired to a real mailbox.
 A domain that sends mail without MX is a mild negative signal in some spam filters, so enabling
 this at launch helps deliverability as well.
 
+
+## Testing a decision, not just describing it
+
+`pnpm decision:test <case.json>` runs the **counter-framework test**: it sends the same evidence to
+TypeSafe/Jev twice — once with our decision, once with the opposite — and reports which questions
+changed answer.
+
+The interpretation rule matters more than the tool:
+
+- A question that **follows the framing** means our evidence does not settle it. That decision is a
+  bet, not a conclusion. Go get external evidence (interviews, market data) before locking it in.
+- A question that **holds under both framings** has real support in the evidence. Those are the only
+  results worth treating as findings.
+
+This came out of an actual run on our product decisions: 7 of 10 flipped, which told us the first
+run (10/10 agreement) was measuring how coherently we had argued, not whether we were right. It also
+correctly identified which decisions were under-supported — the same ones our research had left
+thin.
+
+Notes:
+
+- `scripts/jev-example-case.json` is a generic, non-sensitive example. Real cases contain strategy,
+  so they live in the private Obsidian vault and are passed by absolute path.
+- The API key is read from the environment or from `.env.local` (never committed); it is also in
+  `~/.zshenv` so other agents on this machine inherit it. `pnpm decision:test … --dry` prints the
+  payloads without spending a call.

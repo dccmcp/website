@@ -1,0 +1,43 @@
+{
+  "_comment": "Generic demo case — real product cases are kept in the private Obsidian vault and passed by absolute path.",
+  "state": {
+    "evidence": [
+      "Support tickets for the widget average 40 messages per incident; 70% are the same root cause.",
+      "The three biggest customers all asked for a bulk-import fix this quarter.",
+      "A free community script already solves bulk-import for the most common file format.",
+      "The one customer running bulk-import at scale wrote its own importer and hit data-loss bugs."
+    ]
+  },
+  "decisions": [
+    "Build bulk-import into the core product.",
+    "Charge for it as part of the paid tier."
+  ],
+  "counter_decisions": [
+    "Leave bulk-import to the free community script.",
+    "Give bulk-import away in the free tier and charge for governance instead."
+  ],
+  "questions": {
+    "build_bulk_import": {
+      "type": "noul",
+      "instructions": "Is building bulk-import into the core product the right call?",
+      "criteria": {
+        "true": "The evidence supports owning this capability",
+        "false": "The free script covers it well enough"
+      }
+    },
+    "where_it_belongs": {
+      "type": "choice",
+      "instructions": "Where should bulk-import live?",
+      "criteria": {
+        "paid tier": "It is a reason to pay",
+        "free tier": "It is table stakes, keep the paid hook elsewhere",
+        "community script": "Do not build it at all"
+      }
+    },
+    "evidence_strength": {
+      "type": "score",
+      "instructions": "How strong is the evidence behind this decision?",
+      "criteria": ["no evidence", "weak", "moderate", "strong", "decisive"]
+    }
+  }
+}

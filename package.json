@@ -7,7 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "seo:audit": "node scripts/seo-audit.mjs"
+    "seo:audit": "node scripts/seo-audit.mjs",
+    "decision:test": "node scripts/jev-decision-test.mjs"
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.10",
