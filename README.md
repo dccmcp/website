@@ -149,6 +149,46 @@ without converting anyone, since individuals do not pay for safety; teams pay fo
   present in the HTML at full opacity, so nothing depends on JavaScript to be readable or
   indexable.
 
+## SEO metadata
+
+Titles and descriptions are copy, not boilerplate, but they still follow fixed budgets so nothing
+gets truncated in a SERP. `pnpm build && pnpm seo:audit` checks all 48 rendered pages and fails on
+violations.
+
+| Rule | Value |
+| --- | --- |
+| Title length | ≤ 60 characters (65 is a hard error) |
+| Description, English | 130–160 characters |
+| Description, Chinese | 75–95 characters |
+| Brand | exactly once — the root template appends `\| DCCMCP` |
+| Canonical + `og:title` | required on every page |
+
+**The title pattern.** Primary keyword first, then the qualifier:
+
+```
+DCCMCP Official — MCP for Blender, Rhino, QGIS & CAD           homepage
+MCP for Blender — Official DCCMCP Server for AI Agents         integration
+Pricing — Free Community, Studio $39, Enterprise | DCCMCP      a normal page
+Terms of Service | DCCMCP                                      legal, via the template
+```
+
+**"Official" goes on 20 pages only** — the homepage and the nine integration pages in both locales.
+Those are the pages whose target phrase (`MCP for Blender`) is also the name of an unrelated
+community project, so they are the ones that need to say whose they are. Everywhere else the
+`| DCCMCP` suffix does the work; forcing "Official" onto the integrations hub pushes it past 60
+characters and costs more in keywords than it buys in brand protection.
+
+**Absolute titles.** The homepage and the integration pages set `title: { absolute: … }`. The root
+layout's template does not apply to absolute titles, which is what lets them carry the brand without
+repeating it. This is not optional: the homepage once rendered as
+`MCP for Blender, Rhino, QGIS & Engineering Software | DCCMCP | DCCMCP`.
+
+**Where the copy lives.** Integration titles/descriptions are per-host in `src/lib/integrations.ts`
+(`metaTitle`, `metaDescription`); the Chinese titles are generated in `integrationMetadata`
+(`src/components/sections/integration-page.tsx`) so all nine stay consistent. Blog posts may set
+`seoTitle` in frontmatter when the visible H1 is longer than a SERP allows — the H1 stays
+conversational, the `<title>` stays short.
+
 ## Conversion path
 
 There is a free Community edition, so nothing gates the product behind a sales call:
