@@ -42,7 +42,7 @@ const included = [
 const faq = [
   {
     q: "When will the packages be published?",
-    a: "They are in private testing now. We publish when the safety and rollback behaviour holds up across all 9 integrations, and we email everyone on the notification list the day it happens. Email support@dccmcp.com with the software you use and we will tell you where you are in the queue.",
+    a: `They are in private testing now. We publish when the safety and rollback behaviour holds up across all ${integrations.length} integrations, and we email everyone on the notification list the day it happens. Email support@dccmcp.com with the software you use and we will tell you where you are in the queue.`,
   },
   {
     q: "Can I download or install anything today?",
@@ -81,7 +81,8 @@ export default function DownloadPage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="max-w-[58ch] text-[16px] leading-relaxed text-muted sm:text-[17px]">
-                  All 9 integrations are in private testing. There is nothing to download today —
+                  All {integrations.length} integrations are in private testing. There is nothing to
+                  download today —
                   no package on npm or PyPI, and no download link on this site. When they publish,
                   this page becomes the install guide and everyone on the notification list hears
                   first.

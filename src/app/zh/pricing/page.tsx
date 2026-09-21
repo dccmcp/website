@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { integrations } from "@/lib/integrations";
 import { Check, Minus } from "@phosphor-icons/react/dist/ssr";
 import { Container, Eyebrow, Section, SectionHeading } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
@@ -25,7 +26,7 @@ const zhPlans = {
     blurb: "把 Agent 接到一台机器上所需的一切。发布后直接下载——无需账号、无需信用卡、无需电话。",
     cta: "即将发布",
     includes: [
-      "全部公开集成（Blender、Rhino、Maya、QGIS、Houdini、Photoshop 等 9 款）",
+      `全部 ${integrations.length} 款公开集成 —— 不阉割功能`,
       "默认只读的安全策略",
       "本地 stdio 传输",
       "社区支持与 Discord",
@@ -95,8 +96,6 @@ const zhCompare: Record<string, string> = {
 };
 
 const zhCells: Record<string, string> = {
-  "5": "5 个",
-  "5 + custom": "5 个 + 定制",
   "1 local": "单机 1 份",
   "Shared team": "团队共享",
   "Shared + enforced": "共享 + 强制",
@@ -147,6 +146,11 @@ const faq = [
 function Cell({ value }: { value: string | boolean }) {
   if (value === true) return <Check className="h-4 w-4 text-mint" weight="bold" />;
   if (value === false) return <Minus className="h-4 w-4 text-line" weight="bold" />;
+  // Counts come from the integration list, so format them here instead of
+  // keeping a lookup table that goes stale the moment a host is added.
+  const custom = value.match(/^(\d+) \+ custom$/);
+  if (custom) return <span className="text-[13px] text-muted">{custom[1]} 个 + 定制</span>;
+  if (/^\d+$/.test(value)) return <span className="text-[13px] text-muted">{value} 个</span>;
   return <span className="text-[13px] text-muted">{zhCells[value] ?? value}</span>;
 }
 

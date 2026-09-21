@@ -24,7 +24,7 @@ const notifyHref = `mailto:${site.email}?subject=${encodeURIComponent(
 )}&body=${encodeURIComponent("请在 DCCMCP 集成发布时通知我。\n\n我使用的软件：\n\n")}`;
 
 const included = [
-  "全部公开集成 —— 9 款软件，功能不阉割",
+  `全部 ${integrations.length} 款公开集成 —— 不阉割功能`,
   "每个宿主软件的完整类型化工具面",
   "默认只读的安全策略引擎",
   "撤销最近一次运行（控制台内直接完成）",
@@ -35,7 +35,7 @@ const included = [
 const faq = [
   {
     q: "软件包什么时候发布？",
-    a: "目前正在内测。等安全与回滚机制在全部 9 个集成上都经得起考验，我们就会发布，并在当天邮件通知订阅列表。写信到 support@dccmcp.com 说明你用的软件，我们会告诉你排在什么位置。",
+    a: `目前正在内测。等安全与回滚机制在全部 ${integrations.length} 个集成上都经得起考验，我们就会发布，并在当天邮件通知订阅列表。写信到 support@dccmcp.com 说明你用的软件，我们会告诉你排在什么位置。`,
   },
   {
     q: "现在能下载或安装吗？",
@@ -74,7 +74,7 @@ export default function ChineseDownloadPage() {
               </Reveal>
               <Reveal delay={0.1}>
                 <p className="max-w-[58ch] text-[15.5px] leading-relaxed text-muted sm:text-[17px]">
-                  全部 9 个集成正在内测。目前没有可下载的内容——npm 与 PyPI 上没有包，本站也没有下载链接。发布时，这个页面会变成安装指南，订阅列表里的人会第一时间收到通知。
+                  全部 {integrations.length} 个集成正在内测。目前没有可下载的内容——npm 与 PyPI 上没有包，本站也没有下载链接。发布时，这个页面会变成安装指南，订阅列表里的人会第一时间收到通知。
                 </p>
               </Reveal>
               <Reveal delay={0.15}>

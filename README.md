@@ -108,6 +108,12 @@ static via `generateStaticParams`.
 
 ### Plan entitlements
 
+**Counts are never typed by hand.** `integrations.length` and `toolCount` drive every number the site
+shows — plan comparison cells, hero proof points, the integrations hub, download-page copy. Adding or
+retiring a host is therefore a one-line change in `src/lib/integrations.ts`, and nothing can silently
+claim "10 integrations" after there are nine. (That had already happened once: the plan comparison
+said "5 public integrations" while the site listed ten.)
+
 `src/lib/pricing.ts` is the single source of truth for what each plan includes; the pricing pages
 (EN and ZH), the home-page preview and the JSON-LD all read from it. When a capability moves
 between plans, change it there first, then fix the prose in the places that assert it:

@@ -325,7 +325,7 @@ export default function ChineseHomePage() {
               把 Agent 放进真实软件，同时守住你的流水线
             </h2>
             <p className="max-w-[58ch] text-[15.5px] leading-relaxed text-muted">
-              9 个集成正在内测，目前还没有可下载的安装包。留下你的软件清单，公测时我们会第一时间通知你。
+              {integrations.length} 个集成正在内测，目前还没有可下载的安装包。留下你的软件清单，公测时我们会第一时间通知你。
             </p>
             <div className="flex flex-wrap items-center justify-center gap-3">
               <ButtonLink href="/zh/download" size="lg">

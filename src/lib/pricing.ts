@@ -1,3 +1,8 @@
+import { integrations } from "@/lib/integrations";
+
+/** Derived so a plan comparison can never drift from the actual integration list. */
+const integrationCount = integrations.length;
+
 export type Plan = {
   id: string;
   name: string;
@@ -20,7 +25,7 @@ export const plans: Plan[] = [
     bestFor: "Solo artists, students and evaluation",
     cta: { label: "Coming soon", href: "/download" },
     includes: [
-      "All public integrations (Blender, Rhino, FreeCAD, QGIS)",
+      `All ${integrationCount} public integrations — no feature gating`,
       "Read-only-by-default safety policy",
       "Undo for the last run",
       "Local stdio transport",
@@ -76,7 +81,7 @@ export const compare: CompareRow[] = [
   {
     group: "Integrations",
     rows: [
-      { feature: "Public integrations", community: "5", studio: "5", enterprise: "5 + custom" },
+      { feature: "Public integrations", community: String(integrationCount), studio: String(integrationCount), enterprise: `${integrationCount} + custom` },
       { feature: "Custom tool registration", community: false, studio: true, enterprise: true },
       { feature: "Private/bespoke software bridges", community: false, studio: false, enterprise: true },
       { feature: "Legacy host versions", community: false, studio: false, enterprise: true },
