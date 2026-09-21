@@ -9,9 +9,9 @@ import { integrationsByCategory, integrations, toolCount } from "@/lib/integrati
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "All Integrations — MCP Servers for Blender, Maya, Houdini, Rhino, Photoshop",
+  title: "MCP Integrations — Blender, Rhino, QGIS & CAD",
   description:
-    "Every DCCMCP integration in one place: MCP Servers for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD and QGIS, plus private bridges for in-house software.",
+    "Every DCCMCP integration in one place: MCP servers for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD and QGIS.",
   alternates: { canonical: "/integrations", languages: { en: "/integrations", "zh-CN": "/zh/integrations" } },
   keywords: [
     "MCP for Blender",

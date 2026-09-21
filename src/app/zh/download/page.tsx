@@ -10,9 +10,9 @@ import { integrations, toolCount } from "@/lib/integrations";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "即将发布 —— DCCMCP 软件包尚未发布",
+  title: "即将发布 — 软件包内测中",
   description:
-    "Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD、QGIS 的 DCCMCP 集成正在内测。软件包即将发布——写信到 support@dccmcp.com 订阅通知。",
+    "Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD、QGIS 的 DCCMCP 集成正在内测，发布时邮件通知订阅列表。",
   alternates: { canonical: "/zh/download", languages: { en: "/download", "zh-CN": "/zh/download" } },
   keywords: ["DCCMCP 发布时间", "MCP for Blender 下载", "npx dccmcp-blender", "MCP for Maya 中文"],
 };

@@ -10,9 +10,9 @@ import { integrations, toolCount } from "@/lib/integrations";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Coming soon — DCCMCP packages are not published yet",
+  title: "Coming soon — Packages in Private Testing",
   description:
-    "DCCMCP integrations for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD and QGIS are in private testing. Packages publish soon — email support@dccmcp.com to be notified.",
+    "DCCMCP integrations for Blender, Maya, Houdini, 3ds Max, Rhino, ZBrush, Photoshop, FreeCAD and QGIS are in private testing.",
   alternates: { canonical: "/download", languages: { en: "/download", "zh-CN": "/zh/download" } },
   keywords: [
     "DCCMCP release date",

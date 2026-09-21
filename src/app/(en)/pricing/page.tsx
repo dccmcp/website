@@ -10,9 +10,9 @@ import { plans, compare, pricingFaq } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "Pricing — Free Community plan, Studio seats and Enterprise",
+  title: "Pricing — Free Community, Studio $39, Enterprise",
   description:
-    "The free Community edition covers every public MCP integration with a read-only default policy. Studio adds multi-instance control, audit retention and shared policies; Enterprise adds SSO, self-hosting and custom bridges.",
+    "The Community edition is free with a read-only default. Studio adds version history, shared policies and audit retention; Enterprise adds SSO and self-hosting.",
   alternates: { canonical: "/pricing", languages: { en: "/pricing", "zh-CN": "/zh/pricing" } },
   keywords: ["MCP pricing", "MCP server pricing", "studio MCP license", "enterprise MCP deployment"],
 };

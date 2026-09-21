@@ -14,9 +14,9 @@ import { Badge } from "@/components/ui/badge";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "企业版 —— SSO、自托管与私有 MCP 桥接",
+  title: "企业版 — SSO、自托管与私有 MCP 桥接",
   description:
-    "DCCMCP 企业版提供 SSO/SAML、SCIM、自托管或内网隔离部署、无上限审计留存、SIEM 导出、签名构建，以及针对 Blender、Rhino、FreeCAD、QGIS 和自研工具的定制集成。",
+    "企业版提供 SSO/SAML、SCIM、内网隔离部署、无上限审计留存、SIEM 导出、签名构建，以及自研工具的定制 MCP 桥接与具名支持。",
   alternates: {
     canonical: "/zh/enterprise",
     languages: { en: "/enterprise", "zh-CN": "/zh/enterprise" },

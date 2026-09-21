@@ -21,6 +21,11 @@ const DATE_LOCALES: Record<Locale, string> = {
 export type PostMeta = {
   slug: string;
   title: string;
+  /**
+   * Shorter title used for <title> and Open Graph. The visible H1 stays
+   * `title`, which can be longer and more conversational than a SERP allows.
+   */
+  seoTitle?: string;
   description: string;
   date: string;
   readingTime: string;
@@ -39,6 +44,7 @@ function readPost(dir: string, fileName: string): Post {
   return {
     slug,
     title: data.title as string,
+    seoTitle: (data.seoTitle as string) ?? undefined,
     description: data.description as string,
     date: data.date as string,
     readingTime: (data.readingTime as string) ?? "6 min read",

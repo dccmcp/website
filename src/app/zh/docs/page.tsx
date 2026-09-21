@@ -17,9 +17,9 @@ import { agents } from "@/lib/agents";
 import { BrandIcon } from "@/components/site/brand-icon";
 
 export const metadata: Metadata = {
-  title: "文档 —— 快速上手、工具参考与策略指南",
+  title: "文档 — 快速上手、工具参考与策略指南",
   description:
-    "安装 DCCMCP 集成、注册到 Claude、Cursor 或自建 Agent，并配置安全策略。含完整工具参考索引与更新日志。",
+    "安装 DCCMCP 集成、注册到 Claude 或 Cursor、配置安全策略。含完整工具参考索引与更新日志，覆盖从只读到可回退写入的全部能力。",
   alternates: {
     canonical: "/zh/docs",
     languages: { en: "/docs", "zh-CN": "/zh/docs" },

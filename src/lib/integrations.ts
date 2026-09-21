@@ -53,9 +53,9 @@ export const integrations: Integration[] = [
     tagline: "Connect AI agents to Blender — scene graph, geometry nodes, renders and batch automation.",
     summary:
       "A local MCP server plus Blender addon that exposes typed, audited tools for scene inspection, modeling, geometry nodes, shading, rendering and headless batch jobs.",
-    metaTitle: "MCP for Blender — Connect AI Agents to Blender (Claude, Cursor)",
+    metaTitle: "MCP for Blender — Official DCCMCP Server for AI Agents",
     metaDescription:
-      "MCP for Blender connects Claude, Cursor and custom agents to a real Blender session. Typed tools for scene graph, geometry nodes, materials, rendering and batch automation — with safety policies and audit logs.",
+      "MCP for Blender connects Claude, Cursor and your own agents to a live Blender session — typed, audited tools with read-only defaults and undo.",
     primaryKeyword: "MCP for Blender",
     keywords: [
       "MCP for Blender",
@@ -174,9 +174,9 @@ export const integrations: Integration[] = [
     tagline: "Drive Rhino and Grasshopper from an AI agent — NURBS, layers, blocks and parametric definitions.",
     summary:
       "An MCP server and Rhino plugin that gives agents typed access to Rhino documents and Grasshopper definitions: geometry creation, layer and block management, solver control and bake-back.",
-    metaTitle: "MCP for Rhino — Connect AI Agents to Rhino & Grasshopper",
+    metaTitle: "MCP for Rhino & Grasshopper — Official DCCMCP Server",
     metaDescription:
-      "MCP for Rhino connects Claude, Cursor and custom agents to Rhino and Grasshopper. Typed tools for NURBS geometry, layers, blocks, parametric solver control and bake workflows, with audit logs.",
+      "MCP for Rhino connects AI agents to Rhino and Grasshopper — typed tools for NURBS geometry, layers, blocks and parametric definitions.",
     primaryKeyword: "MCP for Rhino",
     keywords: [
       "MCP for Rhino",
@@ -295,9 +295,9 @@ export const integrations: Integration[] = [
     tagline: "Parametric CAD automation for agents — sketches, features, tech drawings and STEP exports.",
     summary:
       "An MCP server and FreeCAD workbench that exposes parametric modeling as typed tools: sketch constraints, Part Design features, spreadsheet parameters, technical drawings and manufacturing exports.",
-    metaTitle: "MCP for FreeCAD — MCP Server for Parametric CAD Automation",
+    metaTitle: "MCP for FreeCAD — Official DCCMCP CAD Automation Server",
     metaDescription:
-      "MCP for FreeCAD gives AI agents typed control over parametric CAD: sketches, Part Design features, spreadsheet parameters, TechDraw sheets and STEP/STL export, with reviewable tool calls.",
+      "MCP for FreeCAD gives AI agents typed control over parametric CAD: sketches, Part Design features, parameters, TechDraw and STEP export.",
     primaryKeyword: "MCP for FreeCAD",
     keywords: [
       "MCP for FreeCAD",
@@ -415,9 +415,9 @@ export const integrations: Integration[] = [
     tagline: "Let agents run real geoprocessing — layers, CRS handling, processing algorithms and print layouts.",
     summary:
       "An MCP server and QGIS plugin that exposes PyQGIS, the processing framework and layout/atlas tooling as typed tools, so agents can analyze and publish geospatial data with full provenance.",
-    metaTitle: "MCP for QGIS — QGIS MCP Integration for AI Agents",
+    metaTitle: "MCP for QGIS — Official DCCMCP Server for GIS Agents",
     metaDescription:
-      "MCP for QGIS connects AI agents to real GIS workflows: layer inspection, CRS-safe geoprocessing, processing algorithms, styled outputs and print layouts, with audit trails for every operation.",
+      "MCP for QGIS lets AI agents run real geoprocessing — layer inspection, CRS-safe operations, algorithms, styled outputs and print layouts.",
     primaryKeyword: "MCP for QGIS",
     keywords: [
       "MCP for QGIS",
@@ -535,9 +535,9 @@ export const integrations: Integration[] = [
     tagline: "Connect AI agents to Maya — scene assembly, rigging, animation curves and batch rendering.",
     summary:
       "An MCP server and Maya module that gives agents typed access to the scene graph, dependency graph wiring, references and namespaces, animation curves and headless mayapy batch jobs.",
-    metaTitle: "MCP for Maya — Connect AI Agents to Maya (Claude, Cursor)",
+    metaTitle: "MCP for Maya — Official DCCMCP Server for AI Agents",
     metaDescription:
-      "MCP for Maya connects Claude, Cursor and custom agents to a real Maya session. Typed tools for scene graph, dependency graph wiring, references, rigging, animation curves and mayapy batch rendering.",
+      "MCP for Maya connects Claude, Cursor and custom agents to a live Maya session — typed tools for scene graph, references and batch rendering.",
     primaryKeyword: "MCP for Maya",
     keywords: [
       "MCP for Maya",
@@ -658,9 +658,9 @@ export const integrations: Integration[] = [
     tagline: "Let agents build and cook Houdini networks — SOPs, VEX, HDAs, PDG/TOPs and USD output.",
     summary:
       "An MCP server and Houdini package that exposes node networks, parameters, VEX snippets, digital assets, PDG/TOPs graphs and USD/Karma output as typed, checkpointed tools.",
-    metaTitle: "MCP for Houdini — AI Agents for Procedural FX & Simulation",
+    metaTitle: "MCP for Houdini — Official DCCMCP Procedural FX Server",
     metaDescription:
-      "MCP for Houdini gives AI agents typed control over Houdini networks: node creation, parameter binding, VEX snippets, HDA instancing, scoped cooks, PDG/TOPs graphs and USD or Karma output.",
+      "MCP for Houdini gives AI agents typed control over node networks: parameters, VEX snippets, HDAs, scoped cooks and USD output.",
     primaryKeyword: "MCP for Houdini",
     keywords: [
       "MCP for Houdini",
@@ -783,9 +783,9 @@ export const integrations: Integration[] = [
     tagline: "Archviz and animation automation for agents — modifiers, materials, XRefs and batch export.",
     summary:
       "An MCP server and 3ds Max plugin that exposes scene assembly, modifier stacks, material libraries, XRef scenes and render submission as typed tools, backed by Python 3 and MAXScript.",
-    metaTitle: "MCP for 3ds Max — AI Automation for Archviz & Animation",
+    metaTitle: "MCP for 3ds Max — Official DCCMCP Archviz Server",
     metaDescription:
-      "MCP for 3ds Max connects AI agents to scene assembly, modifier stacks, material libraries, XRef workflows and batch export. Typed tools with safety policies and audit logs for archviz and animation teams.",
+      "MCP for 3ds Max connects AI agents to scene assembly, modifier stacks, material libraries, XRef workflows and batch export.",
     primaryKeyword: "MCP for 3ds Max",
     keywords: [
       "MCP for 3ds Max",
@@ -905,9 +905,9 @@ export const integrations: Integration[] = [
     tagline: "Agents for texture production — layer stacks, masks, color management and PBR map export.",
     summary:
       "An MCP server and Photoshop UXP plugin that exposes documents, layers, masks, adjustment stacks, channel and profile state and batch export as typed tools for texture and marketing pipelines.",
-    metaTitle: "MCP for Photoshop — AI Texture & Layer Automation for Agents",
+    metaTitle: "MCP for Photoshop — Official DCCMCP Texture Automation",
     metaDescription:
-      "MCP for Photoshop connects AI agents to layer stacks, masks, adjustment layers, color profiles and batch PBR texture export. Non-destructive by default, with checkpointed writes and audit logs.",
+      "MCP for Photoshop connects AI agents to layer stacks, masks, adjustment layers and batch PBR texture export — non-destructive by default.",
     primaryKeyword: "MCP for Photoshop",
     keywords: [
       "MCP for Photoshop",
@@ -1027,9 +1027,9 @@ export const integrations: Integration[] = [
     tagline: "Sculpting pipeline automation — subtool management, remeshing, UV prep and GoZ handoff.",
     summary:
       "An MCP server and ZScript bridge for ZBrush that exposes subtool inventory, remeshing and decimation, polygroup operations, polypaint baking and GoZ handoff as typed tools.",
-    metaTitle: "MCP for ZBrush — AI Subtool, Remesh & GoZ Automation",
+    metaTitle: "MCP for ZBrush — Official DCCMCP Sculpting Server",
     metaDescription:
-      "MCP for ZBrush lets AI agents manage subtools, run ZRemesher and DynaMesh at declared resolutions, bake polypaint to texture maps and hand meshes to other tools through GoZ.",
+      "MCP for ZBrush lets AI agents manage subtools, run ZRemesher and DynaMesh at declared resolutions, and bake polypaint to texture maps.",
     primaryKeyword: "MCP for ZBrush",
     keywords: [
       "MCP for ZBrush",

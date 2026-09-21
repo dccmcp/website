@@ -91,26 +91,32 @@ const T = {
 export function integrationMetadata(slug: string, locale: Locale = "en") {
   const base = getIntegration(slug);
   const zh = locale === "zh" ? getIntegrationZh(slug) : undefined;
-  const integration = base
-    ? { ...base, metaTitle: zh?.tagline ? `${base.name} — 用 AI Agent 连接 ${base.software}` : base.metaTitle, metaDescription: zh?.summary ?? base.metaDescription }
-    : undefined;
-  if (!integration) throw new Error(`Unknown integration: ${slug}`);
+  if (!base) throw new Error(`Unknown integration: ${slug}`);
+
+  /**
+   * Titles are absolute (≤ 60 characters) and carry "Official" on purpose:
+   * the same "MCP for <software>" phrase is used by unrelated community
+   * projects, and we would rather be the result that says which one it is.
+   */
+  const metaTitle =
+    locale === "zh" ? `${base.name} — DCCMCP 官方 MCP 服务器` : base.metaTitle;
+  const metaDescription = locale === "zh" ? (zh?.summary ?? base.metaDescription) : base.metaDescription;
 
   return {
-    title: integration.metaTitle,
-    description: integration.metaDescription,
-    keywords: integration.keywords,
+    title: { absolute: metaTitle },
+    description: metaDescription,
+    keywords: base.keywords,
     alternates: {
-      canonical: `/${integration.slug}`,
+      canonical: `/${base.slug}`,
       languages: {
-        en: `/${integration.slug}`,
-        "zh-CN": `/zh/${integration.slug}`,
+        en: `/${base.slug}`,
+        "zh-CN": `/zh/${base.slug}`,
       },
     },
     openGraph: {
-      title: integration.metaTitle,
-      description: integration.metaDescription,
-      url: `/${integration.slug}`,
+      title: metaTitle,
+      description: metaDescription,
+      url: `/${base.slug}`,
       type: "article" as const,
     },
   };

@@ -17,9 +17,9 @@ import { agents } from "@/lib/agents";
 import { BrandIcon } from "@/components/site/brand-icon";
 
 export const metadata: Metadata = {
-  title: "Documentation — Quickstart, tool reference and policy guide",
+  title: "Documentation — Quickstart, Tools & Policy Guide",
   description:
-    "Install a DCCMCP integration, register it with Claude, Cursor or your own agent, and set a safety policy. Includes the full tool reference index and changelog.",
+    "Install an integration, register it with Claude or Cursor, and set a safety policy. Includes the full tool reference index and changelog.",
   alternates: { canonical: "/docs", languages: { en: "/docs", "zh-CN": "/zh/docs" } },
   keywords: ["DCCMCP docs", "MCP server quickstart", "MCP policy configuration", "tool reference"],
 };

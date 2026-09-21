@@ -5,9 +5,9 @@ import { ButtonLink } from "@/components/ui/button";
 import { Reveal, StaggerGroup, StaggerItem } from "@/components/motion/reveal";
 
 export const metadata: Metadata = {
-  title: "关于我们 —— 为什么我们要为生产软件做 MCP 集成",
+  title: "关于我们 — 为生产软件构建 MCP 集成",
   description:
-    "DCCMCP 为创意与工程软件构建生产级 MCP Server 与插件。这里是我们对「Agent 进入真实流水线」这件事的基本立场。",
+    "DCCMCP 为创意与工程软件构建生产级 MCP Server 与插件，这里是我们对「Agent 进入真实流水线」这件事的基本立场，以及塑造产品的四条原则。",
   alternates: {
     canonical: "/zh/about",
     languages: { en: "/about", "zh-CN": "/zh/about" },

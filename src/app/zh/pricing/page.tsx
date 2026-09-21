@@ -10,9 +10,9 @@ import { compare } from "@/lib/pricing";
 import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = {
-  title: "定价 —— 免费社区版、Studio 席位与企业版",
+  title: "定价 — 免费社区版、Studio 席位与企业版",
   description:
-    "免费使用全部公开 MCP 集成与默认只读策略。Studio 增加多实例控制、审计留存与共享策略；企业版增加 SSO、自托管与定制集成。软硬件包发布后即可使用。",
+    "社区版免费，含全部公开集成与默认只读策略。Studio 增加完整版本历史、共享策略与审计留存；企业版增加 SSO、自托管与定制集成。软件包发布后即可使用。",
   alternates: { canonical: "/zh/pricing", languages: { en: "/pricing", "zh-CN": "/zh/pricing" } },
   keywords: ["MCP 定价", "MCP Server 价格", "工作室 MCP 授权", "企业版 MCP 部署"],
 };

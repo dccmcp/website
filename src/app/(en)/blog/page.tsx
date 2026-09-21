@@ -8,9 +8,9 @@ import { getAllPosts, formatDate } from "@/lib/blog";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Blog — MCP tutorials, integration guides and engineering notes",
+  title: "Blog — MCP Tutorials & Engineering Notes",
   description:
-    "Practical guides for connecting AI agents to Blender, Rhino, FreeCAD and QGIS: safety policies, tool design, audit trails and what actually breaks in production.",
+    "Practical guides for connecting AI agents to Blender, Rhino, FreeCAD and QGIS: safety policies, tool design and what breaks in production.",
   alternates: { canonical: "/blog", languages: { en: "/blog", "zh-CN": "/zh/blog" } },
   keywords: [
     "MCP for Blender tutorial",

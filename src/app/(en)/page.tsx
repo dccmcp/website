@@ -14,9 +14,9 @@ import { FinalCta } from "@/components/sections/final-cta";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: `MCP for Blender, Rhino, QGIS & Engineering Software | ${site.name}`,
+  title: { absolute: "DCCMCP Official — MCP for Blender, Rhino, QGIS & CAD" },
   description:
-    "Deploy production-ready MCP Servers that let Claude, Cursor and your own agents control Blender, Rhino, FreeCAD and QGIS — with typed tools, safety policies and audit logs.",
+    "DCCMCP connects AI agents to Blender, Rhino, FreeCAD and QGIS with typed, audited MCP servers — read-only by default, local, and reversible.",
   alternates: { canonical: "/", languages: { en: "/", "zh-CN": "/zh" } },
 };
 

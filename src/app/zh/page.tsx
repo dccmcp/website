@@ -23,9 +23,9 @@ import { featuredIntegrations, integrations, toolCount } from "@/lib/integration
 import { agents } from "@/lib/agents";
 
 export const metadata: Metadata = {
-  title: "MCP for Blender、Maya、Houdini 与工程软件",
+  title: { absolute: "DCCMCP 官方 — Blender、Rhino、QGIS 与 CAD 的 MCP Server" },
   description:
-    "DCCMCP 提供生产级 MCP Server 与插件，让 Claude Code、Codex、Cursor、豆包等 AI Agent 直接操作 Blender、Maya、Houdini、3ds Max、Rhino、ZBrush、Photoshop、FreeCAD 与 QGIS。类型化工具、安全策略、检查点与审计日志，默认只读、本地运行。",
+    "DCCMCP 提供生产级 MCP Server 与插件，让 AI Agent 直接操作 Blender、Rhino、FreeCAD、QGIS 等软件：类型化工具、默认只读、本地运行，每一步可审计、可回退。",
   alternates: { canonical: "/zh", languages: { en: "/", "zh-CN": "/zh" } },
   keywords: [
     "MCP for Blender",

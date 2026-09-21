@@ -26,7 +26,7 @@ export async function generateMetadata({
   if (!post) return {};
 
   return {
-    title: post.title,
+    title: post.seoTitle ?? post.title,
     description: post.description,
     keywords: post.keywords,
     alternates: {
